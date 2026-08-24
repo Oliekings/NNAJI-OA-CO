@@ -1,0 +1,121 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Property;
+use App\Models\User;
+use App\Models\Inquiry;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class PropertyLifecycleAndWebTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
+    public function test_public_pages_render_successfully()
+    {
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee('NNAJI O.A & COMPANY', false);
+        $response->assertSee('50B+');
+
+        $response = $this->get('/properties');
+        $response->assertStatus(200);
+        $response->assertSee('Active Property Listings');
+
+        $response = $this->get('/portfolio');
+        $response->assertStatus(200);
+        $response->assertSee('Closed Deals');
+
+        $response = $this->get('/services');
+        $response->assertStatus(200);
+        $response->assertSee('Professional Services');
+
+        $response = $this->get('/about');
+        $response->assertStatus(200);
+        $response->assertSee('424962'); // CAC reg
+
+        $response = $this->get('/team');
+        $response->assertStatus(200);
+        $response->assertSee('Chief Ogwuegbu Agomoh Nnaji');
+
+        $response = $this->get('/contact');
+        $response->assertStatus(200);
+        $response->assertSee('Kaduna Head Office');
+
+        $response = $this->get('/request-valuation');
+        $response->assertStatus(200);
+        $response->assertSee('Request Statutory Asset Valuation');
+    }
+
+    public function test_property_lifecycle_automation_routes_sold_property_to_closed_deals()
+    {
+        $admin = User::first();
+
+        // 1. Create an active property
+        $property = Property::create([
+            'title' => 'Test Commercial Plaza In Kaduna',
+            'property_type' => 'Commercial',
+            'listing_type' => 'for_sale',
+            'price' => 500000000,
+            'location_city' => 'Kaduna',
+            'location_state' => 'Kaduna State',
+            'description' => 'A prime test commercial property.',
+            'status' => 'available',
+        ]);
+
+        // Verify it appears in active listings
+        $this->assertTrue(Property::active()->where('id', $property->id)->exists());
+        $this->assertFalse(Property::closedDeals()->where('id', $property->id)->exists());
+
+        // 2. Admin toggles status to 'sold' via lifecycle endpoint
+        $response = $this->actingAs($admin)->post(route('admin.properties.toggle-status', $property->id), [
+            'status' => 'sold',
+            'transaction_summary' => 'Sold to institutional pension fund.',
+        ]);
+
+        $response->assertSessionHas('success');
+
+        // 3. Verify it is now automated into closed deals and no longer in active listings
+        $property->refresh();
+        $this->assertEquals('sold', $property->status);
+        $this->assertFalse(Property::active()->where('id', $property->id)->exists());
+        $this->assertTrue(Property::closedDeals()->where('id', $property->id)->exists());
+
+        // Check public portfolio response
+        $portfolioResponse = $this->get('/portfolio');
+        $portfolioResponse->assertStatus(200);
+        $portfolioResponse->assertSee('Test Commercial Plaza In Kaduna');
+    }
+
+    public function test_client_inquiry_submission()
+    {
+        $payload = [
+            'type' => 'valuation_request',
+            'name' => 'Alhaji Sanusi Dantata',
+            'email' => 'dantata@example.com',
+            'phone' => '08031234567',
+            'organization' => 'Dantata Oil & Gas',
+            'service_category' => 'Property & Asset Valuation',
+            'asset_type' => 'Industrial Plant / Factory & Machinery',
+            'asset_location' => 'Kakuri, Kaduna',
+            'preferred_branch' => 'Kaduna Operational Head Office',
+            'message' => 'Need full plant and machinery valuation for mortgage refinancing.',
+        ];
+
+        $response = $this->post('/inquiry', $payload);
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('inquiries', [
+            'email' => 'dantata@example.com',
+            'name' => 'Alhaji Sanusi Dantata',
+            'status' => 'new',
+        ]);
+    }
+}

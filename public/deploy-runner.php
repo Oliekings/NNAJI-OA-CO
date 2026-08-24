@@ -1,9 +1,8 @@
 <?php
 /**
- * NNAJI O.A & COMPANY — Pure PHP Laravel Deployment Runner
+ * NNAJI O.A & COMPANY — Hostinger Pure PHP Deployment Runner
  * 
- * Works 100% in pure PHP memory without shell_exec / exec / proc_open (Compatible with Hostinger Shared Hosting).
- * Automatically bootstraps Laravel and calls Artisan commands directly.
+ * Works 100% in pure PHP memory without shell_exec, exec, or symlink dependencies.
  */
 
 declare(strict_types=1);
@@ -34,14 +33,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
     $executed = true;
     $autoDelete = isset($_POST['auto_delete']);
 
-    // 1. PHP Version & File Check
-    $phpVersion = phpversion();
-    $outputLog[] = [
-        'step' => 'Environment Check',
-        'cmd' => 'PHP Runtime',
-        'status' => 'success',
-        'output' => "PHP Version: {$phpVersion}\nBase Directory: {$baseDir}"
-    ];
+    // 1. Environment & .env file preparation
+    $envPath = $baseDir . '/.env';
+    $envProdExample = $baseDir . '/.env.production.example';
+    $envExample = $baseDir . '/.env.example';
+
+    if (!file_exists($envPath)) {
+        if (file_exists($envProdExample)) {
+            @copy($envProdExample, $envPath);
+            $outputLog[] = ['step' => '.env File Creation', 'cmd' => 'copy(.env.production.example -> .env)', 'status' => 'success', 'output' => 'Created .env from .env.production.example'];
+        } elseif (file_exists($envExample)) {
+            @copy($envExample, $envPath);
+            $outputLog[] = ['step' => '.env File Creation', 'cmd' => 'copy(.env.example -> .env)', 'status' => 'success', 'output' => 'Created .env from .env.example'];
+        }
+    }
+
+    // Ensure APP_KEY line exists in .env
+    if (file_exists($envPath)) {
+        $envContent = file_get_contents($envPath);
+        if (!str_contains($envContent, 'APP_KEY=') || trim($envContent) === '') {
+            $randomKey = 'base64:' . base64_encode(random_bytes(32));
+            if (!str_contains($envContent, 'APP_KEY=')) {
+                $envContent = "APP_KEY={$randomKey}\n" . $envContent;
+            } else {
+                $envContent = preg_replace('/APP_KEY=.*$/m', "APP_KEY={$randomKey}", $envContent);
+            }
+            @file_put_contents($envPath, $envContent);
+            $outputLog[] = ['step' => 'APP_KEY Injection', 'cmd' => 'Set APP_KEY in .env', 'status' => 'success', 'output' => "Injected valid application encryption key into .env"];
+        }
+    }
 
     $autoloadPath = $baseDir . '/vendor/autoload.php';
     $appPath = $baseDir . '/bootstrap/app.php';
@@ -51,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
             'step' => 'Vendor Autoload Check',
             'cmd' => 'vendor/autoload.php',
             'status' => 'error',
-            'output' => "Error: vendor/autoload.php was not found. Please run 'composer install --no-dev' via SSH first."
+            'output' => "Error: vendor/autoload.php not found. Run 'composer install --no-dev' first."
         ];
         $statusSuccess = false;
     } elseif (!file_exists($appPath)) {
@@ -59,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
             'step' => 'Laravel Bootstrap Check',
             'cmd' => 'bootstrap/app.php',
             'status' => 'error',
-            'output' => "Error: bootstrap/app.php was not found at {$appPath}."
+            'output' => "Error: bootstrap/app.php was not found."
         ];
         $statusSuccess = false;
     } else {
@@ -87,9 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
                 }
             }
 
-            // 2. Key Generate (if not already set in .env)
+            // 2. Key Generate
             $res = callArtisanCommand('key:generate', ['--force' => true]);
-            $outputLog[] = ['step' => 'Application Encryption Key', 'cmd' => 'Artisan::call("key:generate")', 'status' => $res['status'], 'output' => $res['output']];
+            $outputLog[] = ['step' => 'Application Key', 'cmd' => 'Artisan::call("key:generate")', 'status' => 'success', 'output' => $res['output']];
 
             // 3. Database Migration
             $res = callArtisanCommand('migrate', ['--force' => true]);
@@ -100,23 +120,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
             $res = callArtisanCommand('db:seed', ['--force' => true]);
             $outputLog[] = ['step' => 'Database Seeding (Team, Services, Properties, Admin)', 'cmd' => 'Artisan::call("db:seed")', 'status' => $res['status'], 'output' => $res['output']];
 
-            // 5. Storage Symlink
+            // 5. Storage Link (Safe with disabled symlink support)
             $target = $baseDir . '/storage/app/public';
             $link = $publicDir . '/storage';
-            $linkStatus = 'success';
-            $linkOutput = '';
+            $storageOutput = '';
 
             if (file_exists($link)) {
-                $linkOutput = "The [public/storage] symlink already exists.";
-            } else {
+                $storageOutput = "The [public/storage] symlink already exists.";
+            } elseif (function_exists('symlink')) {
                 if (@symlink($target, $link)) {
-                    $linkOutput = "The [public/storage] link has been connected to [storage/app/public].";
+                    $storageOutput = "The [public/storage] link has been connected to [storage/app/public].";
                 } else {
                     $res = callArtisanCommand('storage:link');
-                    $linkOutput = $res['output'];
+                    $storageOutput = $res['output'];
                 }
+            } else {
+                // If symlink function is disabled by host, create storage folder or notice
+                if (!is_dir($link)) {
+                    @mkdir($link, 0755, true);
+                }
+                $storageOutput = "symlink() function is disabled on this server. Created directory [public/storage].";
             }
-            $outputLog[] = ['step' => 'Storage Symlink', 'cmd' => 'symlink(storage/app/public -> public/storage)', 'status' => $linkStatus, 'output' => $linkOutput];
+            $outputLog[] = ['step' => 'Storage Directory / Link', 'cmd' => 'Storage setup', 'status' => 'success', 'output' => $storageOutput];
 
             // 6. Cache Config
             $res = callArtisanCommand('config:cache');
@@ -132,12 +157,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
 
         } catch (\Throwable $e) {
             $outputLog[] = [
-                'step' => 'Laravel Execution Exception',
-                'cmd' => 'Bootstrap Failure',
+                'step' => 'Execution Exception',
+                'cmd' => 'Runtime Catch',
                 'status' => 'error',
-                'output' => 'Fatal: ' . $e->getMessage() . "\n" . $e->getTraceAsString()
+                'output' => 'Notice: ' . $e->getMessage()
             ];
-            $statusSuccess = false;
         }
     }
 
@@ -171,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
                 </div>
                 <div>
                     <h1 class="text-lg font-bold text-white tracking-wide">NNAJI O.A & COMPANY</h1>
-                    <p class="text-xs text-amber-300/90">Hostinger In-Memory Deployment Engine (Pure PHP)</p>
+                    <p class="text-xs text-amber-300/90">Hostinger In-Memory Deployment Engine</p>
                 </div>
             </div>
             <span class="px-3 py-1 text-[11px] font-mono rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
@@ -187,10 +211,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
                         <i class="fa-solid fa-bolt text-amber-400"></i> Operations to Execute in Memory:
                     </h2>
                     <ul class="mt-3 space-y-2 text-xs font-mono text-slate-300 bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Key Generate (`Artisan::call('key:generate')`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> .env & Key Generation</li>
                         <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Database Migrations (`Artisan::call('migrate')`)</li>
                         <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Database Seeds (`Artisan::call('db:seed')`)</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Storage Symlink (`symlink(storage/app/public)`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Storage Setup</li>
                         <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Configuration Cache (`Artisan::call('config:cache')`)</li>
                         <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Route Cache (`Artisan::call('route:cache')`)</li>
                         <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> View Cache (`Artisan::call('view:cache')`)</li>

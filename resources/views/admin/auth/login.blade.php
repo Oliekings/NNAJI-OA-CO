@@ -68,7 +68,7 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Email Address</label>
                     <div class="relative">
-                        <input type="email" name="email" value="{{ old('email', 'admin@nnajioacompany.com') }}" required class="w-full px-4 py-2.5 pl-10 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
+                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="name@company.com" class="w-full px-4 py-2.5 pl-10 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
                         <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Password</label>
                     <div class="relative">
-                        <input type="password" name="password" value="AdminNnaji2026!" required class="w-full px-4 py-2.5 pl-10 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
+                        <input type="password" name="password" required placeholder="••••••••••••" class="w-full px-4 py-2.5 pl-10 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
                         <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
                     </div>
                 </div>

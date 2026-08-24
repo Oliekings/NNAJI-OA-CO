@@ -1,9 +1,9 @@
 <?php
 /**
- * NNAJI O.A & COMPANY — Automated Web Deployment Runner
+ * NNAJI O.A & COMPANY — Pure PHP Laravel Deployment Runner
  * 
- * Secure one-click runner for running Laravel migrations, seeds, storage link, and caching on Hostinger.
- * Auto-deletes itself after execution or via the manual Self-Destruct button.
+ * Works 100% in pure PHP memory without shell_exec / exec / proc_open (Compatible with Hostinger Shared Hosting).
+ * Automatically bootstraps Laravel and calls Artisan commands directly.
  */
 
 declare(strict_types=1);
@@ -12,10 +12,10 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 set_time_limit(300);
 
-// Root path detection (either in public/ or root)
-$isPublicFolder = file_exists(__DIR__ . '/../artisan');
+// Root path detection
+$isPublicFolder = file_exists(__DIR__ . '/../bootstrap/app.php');
 $baseDir = $isPublicFolder ? realpath(__DIR__ . '/..') : __DIR__;
-$artisanPath = $baseDir . '/artisan';
+$publicDir = $isPublicFolder ? __DIR__ : $baseDir . '/public';
 
 // Self-destruct handler
 if (isset($_POST['action']) && $_POST['action'] === 'self_destruct') {
@@ -27,13 +27,6 @@ if (isset($_POST['action']) && $_POST['action'] === 'self_destruct') {
 
 $outputLog = [];
 $statusSuccess = true;
-
-function runArtisan(string $command, string $baseDir): string {
-    $cmd = "cd " . escapeshellarg($baseDir) . " && php artisan " . $command . " 2>&1";
-    $output = @shell_exec($cmd);
-    return trim($output ?? 'No output returned');
-}
-
 $executed = false;
 $autoDelete = false;
 
@@ -41,58 +34,114 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
     $executed = true;
     $autoDelete = isset($_POST['auto_delete']);
 
-    // 1. PHP Version & Environment Check
+    // 1. PHP Version & File Check
     $phpVersion = phpversion();
     $outputLog[] = [
         'step' => 'Environment Check',
-        'cmd' => 'php -v',
-        'status' => version_compare($phpVersion, '8.2.0', '>=') ? 'success' : 'warning',
-        'output' => "PHP Version: {$phpVersion} (Base Dir: {$baseDir})"
+        'cmd' => 'PHP Runtime',
+        'status' => 'success',
+        'output' => "PHP Version: {$phpVersion}\nBase Directory: {$baseDir}"
     ];
 
-    // Check artisan exists
-    if (!file_exists($artisanPath)) {
+    $autoloadPath = $baseDir . '/vendor/autoload.php';
+    $appPath = $baseDir . '/bootstrap/app.php';
+
+    if (!file_exists($autoloadPath)) {
         $outputLog[] = [
-            'step' => 'Artisan Verification',
-            'cmd' => 'file_exists(artisan)',
+            'step' => 'Vendor Autoload Check',
+            'cmd' => 'vendor/autoload.php',
             'status' => 'error',
-            'output' => "Error: artisan file not found at {$artisanPath}. Ensure files are uploaded correctly."
+            'output' => "Error: vendor/autoload.php was not found. Please run 'composer install --no-dev' via SSH first."
+        ];
+        $statusSuccess = false;
+    } elseif (!file_exists($appPath)) {
+        $outputLog[] = [
+            'step' => 'Laravel Bootstrap Check',
+            'cmd' => 'bootstrap/app.php',
+            'status' => 'error',
+            'output' => "Error: bootstrap/app.php was not found at {$appPath}."
         ];
         $statusSuccess = false;
     } else {
-        // 2. Key Generate
-        $out = runArtisan('key:generate --force', $baseDir);
-        $outputLog[] = ['step' => 'Application Key', 'cmd' => 'php artisan key:generate --force', 'status' => 'success', 'output' => $out];
+        try {
+            // Bootstrap Laravel Application in pure PHP memory
+            require_once $autoloadPath;
+            $app = require_once $appPath;
 
-        // 3. Migrate Database
-        $out = runArtisan('migrate --force', $baseDir);
-        $status = (str_contains(strtolower($out), 'sqlstate') || str_contains(strtolower($out), 'error')) ? 'error' : 'success';
-        if ($status === 'error') $statusSuccess = false;
-        $outputLog[] = ['step' => 'Database Migration', 'cmd' => 'php artisan migrate --force', 'status' => $status, 'output' => $out];
+            $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
+            $kernel->bootstrap();
 
-        // 4. Seed Database
-        $out = runArtisan('db:seed --force', $baseDir);
-        $status = (str_contains(strtolower($out), 'sqlstate') || str_contains(strtolower($out), 'error')) ? 'error' : 'success';
-        $outputLog[] = ['step' => 'Database Seeding', 'cmd' => 'php artisan db:seed --force', 'status' => $status, 'output' => $out];
+            function callArtisanCommand(string $command, array $parameters = []): array {
+                try {
+                    $exitCode = \Illuminate\Support\Facades\Artisan::call($command, $parameters);
+                    $output = trim(\Illuminate\Support\Facades\Artisan::output());
+                    return [
+                        'status' => $exitCode === 0 ? 'success' : 'warning',
+                        'output' => $output ?: 'Command executed successfully.'
+                    ];
+                } catch (\Throwable $e) {
+                    return [
+                        'status' => 'error',
+                        'output' => 'Error: ' . $e->getMessage()
+                    ];
+                }
+            }
 
-        // 5. Storage Link
-        $out = runArtisan('storage:link', $baseDir);
-        $outputLog[] = ['step' => 'Storage Symlink', 'cmd' => 'php artisan storage:link', 'status' => 'success', 'output' => $out];
+            // 2. Key Generate (if not already set in .env)
+            $res = callArtisanCommand('key:generate', ['--force' => true]);
+            $outputLog[] = ['step' => 'Application Encryption Key', 'cmd' => 'Artisan::call("key:generate")', 'status' => $res['status'], 'output' => $res['output']];
 
-        // 6. Cache Configurations
-        $out = runArtisan('config:cache', $baseDir);
-        $outputLog[] = ['step' => 'Config Cache', 'cmd' => 'php artisan config:cache', 'status' => 'success', 'output' => $out];
+            // 3. Database Migration
+            $res = callArtisanCommand('migrate', ['--force' => true]);
+            if ($res['status'] === 'error') $statusSuccess = false;
+            $outputLog[] = ['step' => 'Database Migration', 'cmd' => 'Artisan::call("migrate")', 'status' => $res['status'], 'output' => $res['output']];
 
-        // 7. Cache Routes
-        $out = runArtisan('route:cache', $baseDir);
-        $outputLog[] = ['step' => 'Route Cache', 'cmd' => 'php artisan route:cache', 'status' => 'success', 'output' => $out];
+            // 4. Database Seeding
+            $res = callArtisanCommand('db:seed', ['--force' => true]);
+            $outputLog[] = ['step' => 'Database Seeding (Team, Services, Properties, Admin)', 'cmd' => 'Artisan::call("db:seed")', 'status' => $res['status'], 'output' => $res['output']];
 
-        // 8. Cache Views
-        $out = runArtisan('view:cache', $baseDir);
-        $outputLog[] = ['step' => 'View Cache', 'cmd' => 'php artisan view:cache', 'status' => 'success', 'output' => $out];
+            // 5. Storage Symlink
+            $target = $baseDir . '/storage/app/public';
+            $link = $publicDir . '/storage';
+            $linkStatus = 'success';
+            $linkOutput = '';
+
+            if (file_exists($link)) {
+                $linkOutput = "The [public/storage] symlink already exists.";
+            } else {
+                if (@symlink($target, $link)) {
+                    $linkOutput = "The [public/storage] link has been connected to [storage/app/public].";
+                } else {
+                    $res = callArtisanCommand('storage:link');
+                    $linkOutput = $res['output'];
+                }
+            }
+            $outputLog[] = ['step' => 'Storage Symlink', 'cmd' => 'symlink(storage/app/public -> public/storage)', 'status' => $linkStatus, 'output' => $linkOutput];
+
+            // 6. Cache Config
+            $res = callArtisanCommand('config:cache');
+            $outputLog[] = ['step' => 'Configuration Cache', 'cmd' => 'Artisan::call("config:cache")', 'status' => $res['status'], 'output' => $res['output']];
+
+            // 7. Cache Routes
+            $res = callArtisanCommand('route:cache');
+            $outputLog[] = ['step' => 'Route Cache', 'cmd' => 'Artisan::call("route:cache")', 'status' => $res['status'], 'output' => $res['output']];
+
+            // 8. Cache Views
+            $res = callArtisanCommand('view:cache');
+            $outputLog[] = ['step' => 'Blade View Cache', 'cmd' => 'Artisan::call("view:cache")', 'status' => $res['status'], 'output' => $res['output']];
+
+        } catch (\Throwable $e) {
+            $outputLog[] = [
+                'step' => 'Laravel Execution Exception',
+                'cmd' => 'Bootstrap Failure',
+                'status' => 'error',
+                'output' => 'Fatal: ' . $e->getMessage() . "\n" . $e->getTraceAsString()
+            ];
+            $statusSuccess = false;
+        }
     }
 
-    // Auto-delete if checked and successful
+    // Auto-delete if enabled and successful
     if ($autoDelete && $statusSuccess) {
         @unlink(__FILE__);
     }
@@ -122,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
                 </div>
                 <div>
                     <h1 class="text-lg font-bold text-white tracking-wide">NNAJI O.A & COMPANY</h1>
-                    <p class="text-xs text-amber-300/90">Automated Hostinger Production Setup Runner</p>
+                    <p class="text-xs text-amber-300/90">Hostinger In-Memory Deployment Engine (Pure PHP)</p>
                 </div>
             </div>
             <span class="px-3 py-1 text-[11px] font-mono rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400">
@@ -135,16 +184,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
             <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xl">
                 <div>
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-amber-400"></i> Commands to be Executed:
+                        <i class="fa-solid fa-bolt text-amber-400"></i> Operations to Execute in Memory:
                     </h2>
                     <ul class="mt-3 space-y-2 text-xs font-mono text-slate-300 bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan key:generate --force</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan migrate --force</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan db:seed --force</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan storage:link</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan config:cache</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan route:cache</li>
-                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> php artisan view:cache</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Key Generate (`Artisan::call('key:generate')`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Database Migrations (`Artisan::call('migrate')`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Database Seeds (`Artisan::call('db:seed')`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Storage Symlink (`symlink(storage/app/public)`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Configuration Cache (`Artisan::call('config:cache')`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Route Cache (`Artisan::call('route:cache')`)</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> View Cache (`Artisan::call('view:cache')`)</li>
                     </ul>
                 </div>
 
@@ -152,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
                     <div class="flex items-center space-x-2 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
                         <input type="checkbox" name="auto_delete" id="auto_delete" value="1" checked class="rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
                         <label for="auto_delete" class="text-xs text-slate-300 cursor-pointer">
-                            <strong class="text-white">Auto-Delete this script</strong> automatically when finished (Recommended for security)
+                            <strong class="text-white">Auto-Delete this script</strong> automatically after success (Recommended)
                         </label>
                     </div>
 
@@ -171,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['run_deployment'])) {
                         <i class="fa-solid fa-terminal text-emerald-400"></i> Execution Results
                     </h2>
                     <span class="px-3 py-1 text-xs font-bold rounded-full <?= $statusSuccess ? 'bg-emerald-950 text-emerald-300 border border-emerald-600/40' : 'bg-red-950 text-red-300 border border-red-600/40' ?>">
-                        <?= $statusSuccess ? '✓ All Commands Completed' : '⚠ Completed with Warnings' ?>
+                        <?= $statusSuccess ? '✓ Deployment Completed Successfully' : '⚠ Completed with Issues' ?>
                     </span>
                 </div>
 

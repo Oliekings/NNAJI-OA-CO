@@ -107,6 +107,10 @@
                 <i class="fa-solid fa-users-gear w-6 text-gold-400"></i>
                 Partners & Surveyors
             </a>
+            <a href="{{ route('admin.profile.edit') }}" class="flex items-center px-3 py-2.5 rounded-lg transition {{ request()->routeIs('admin.profile.*') ? 'bg-forest-800 text-gold-400 font-semibold' : 'text-slate-300 hover:bg-forest-900 hover:text-white' }}">
+                <i class="fa-solid fa-key w-6 text-gold-400"></i>
+                Account & Password
+            </a>
 
             <div class="pt-4 pb-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3">
                 Live Public Site
@@ -124,15 +128,15 @@
         <!-- Current User Profile & Logout -->
         <div class="p-4 bg-forest-900 border-t border-forest-800">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-full bg-gold-400/20 text-gold-400 flex items-center justify-center font-bold">
+                <a href="{{ route('admin.profile.edit') }}" class="flex items-center space-x-3 group/user hover:opacity-90 transition">
+                    <div class="w-9 h-9 rounded-full bg-gold-400/20 text-gold-400 flex items-center justify-center font-bold group-hover/user:scale-105 transition-transform">
                         <i class="fa-solid fa-user-tie text-sm"></i>
                     </div>
                     <div class="overflow-hidden">
-                        <div class="text-xs font-bold text-white truncate">{{ auth()->user()->name ?? 'Administrator' }}</div>
-                        <div class="text-[10px] text-slate-400 truncate">{{ auth()->user()->email ?? 'admin@nnajioacompany.com' }}</div>
+                        <div class="text-xs font-bold text-white truncate group-hover/user:text-gold-300 transition-colors">{{ auth()->user()->name ?? 'Administrator' }}</div>
+                        <div class="text-[10px] text-slate-400 truncate flex items-center gap-1"><i class="fa-solid fa-gear text-[9px] text-gold-500"></i> Settings</div>
                     </div>
-                </div>
+                </a>
                 <form action="{{ route('admin.logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" title="Logout" class="text-slate-400 hover:text-red-400 transition p-1.5">
@@ -153,11 +157,14 @@
                 <span class="text-xs text-slate-400">|</span>
                 <span class="text-xs text-slate-500">@yield('header_subtitle', 'NNAJI O.A & COMPANY Property Automation')</span>
             </div>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('admin.profile.edit') }}" class="px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-xs flex items-center transition">
+                    <i class="fa-solid fa-lock text-gold-600 mr-1.5"></i> Change Password
+                </a>
                 <a href="{{ route('admin.properties.create') }}" class="px-3.5 py-2 rounded-lg bg-forest-900 hover:bg-forest-800 text-white font-medium text-xs flex items-center transition shadow-sm">
                     <i class="fa-solid fa-plus mr-1.5 text-gold-400"></i> New Property
                 </a>
-                <a href="{{ route('home') }}" target="_blank" class="px-3.5 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs flex items-center transition">
+                <a href="{{ route('home') }}" target="_blank" class="px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-xs flex items-center transition">
                     <i class="fa-solid fa-globe mr-1.5 text-slate-500"></i> View Site
                 </a>
             </div>

@@ -41,6 +41,20 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/request-valuation', [ContactController::class, 'requestValuation'])->name('request-valuation');
 Route::post('/inquiry', [ContactController::class, 'storeInquiry'])->name('inquiry.store')->middleware('throttle:10,1');
 
+// Storage Asset Fallback Delivery (Guarantees 100% reliable image loading on shared hosts)
+Route::get('/storage/{path}', function (string $path) {
+    if (str_contains($path, '..') || str_contains($path, "\0")) {
+        abort(404);
+    }
+    $fullPath = storage_path('app/public/' . $path);
+    if (!file_exists($fullPath) || !is_file($fullPath)) {
+        abort(404);
+    }
+    return response()->file($fullPath, [
+        'Cache-Control' => 'public, max-age=31536000, immutable',
+    ]);
+})->where('path', '.*')->name('storage.fallback');
+
 /*
 |--------------------------------------------------------------------------
 | Admin CMS Routes

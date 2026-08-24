@@ -123,8 +123,9 @@ class ImageUploadService
         // Ensure storage directory exists
         $dir = dirname($absoluteDestinationPath);
         if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
+            @mkdir($dir, 0775, true);
         }
+        @chmod($dir, 0775);
 
         // 10. Save optimized WebP (or fallback JPEG if WebP unsupported)
         if (function_exists('imagewebp')) {
@@ -135,6 +136,8 @@ class ImageUploadService
             $absoluteDestinationPath = storage_path('app/public/' . $relativeStoragePath);
             imagejpeg($canvas, $absoluteDestinationPath, $quality);
         }
+
+        @chmod($absoluteDestinationPath, 0664);
 
         // Free GD memory
         imagedestroy($sourceImage);

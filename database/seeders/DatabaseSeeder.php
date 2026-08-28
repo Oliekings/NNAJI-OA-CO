@@ -304,7 +304,7 @@ class DatabaseSeeder extends Seeder
                     'Public Sector Land Acquisition',
                     'Municipal Property Rating',
                 ],
-                'avatar' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80',
+                'avatar' => '/storage/team/esv-salisu-pai.webp',
                 'is_partner' => true,
                 'sort_order' => 4,
             ],

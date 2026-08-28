@@ -401,7 +401,7 @@ class DatabaseSeeder extends Seeder
                     'Cross-Border Asset Verification for North American Clients',
                 ],
                 'special_skills' => ['Diaspora Investment', 'International Client Relations'],
-                'avatar' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+                'avatar' => '/storage/team/mrs-chidi-nnaji.webp',
                 'is_partner' => false,
                 'sort_order' => 7,
             ],

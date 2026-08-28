@@ -111,11 +111,16 @@
                         </div>
                         <div class="w-px h-6 bg-gradient-to-b from-forest-900 to-gold-400/40 mx-auto"></div>
                         <div class="inline-block bg-forest-900 text-white px-8 py-3 rounded-xl border border-gold-500/20 shadow-md font-bold text-sm">
-                            PRINCIPAL PARTNER / CHIEF CONSULTANT
+                            PRINCIPAL PARTNER & HEAD OF PRACTICE
+                            <span class="block text-[11px] text-gold-300 font-normal mt-0.5">ESV Nnaji Nnamdi Ikechukwu (FL1143)</span>
+                        </div>
+                        <div class="w-px h-6 bg-gradient-to-b from-forest-900 to-gold-400/40 mx-auto"></div>
+                        <div class="inline-block bg-forest-950/80 text-slate-300 px-7 py-2 rounded-xl border border-gold-500/20 shadow-sm text-xs font-semibold">
+                            FOUNDING PRINCIPAL PARTNER <span class="text-gold-400/90 text-[11px]">(In Memoriam: Late Chief O. A. Nnaji, FNIVS)</span>
                         </div>
                         <div class="w-px h-6 bg-gradient-to-b from-forest-900 to-gold-400/40 mx-auto"></div>
                         <div class="inline-block bg-gradient-to-r from-gold-500 to-gold-400 text-forest-950 px-8 py-2 rounded-xl shadow-md font-bold text-xs tracking-wider">
-                            BRANCH MANAGERS / PARTNERS
+                            ASSOCIATE PARTNERS & BRANCH MANAGERS
                         </div>
                     </div>
 
@@ -172,9 +177,9 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach([
+                        ['title' => 'EMSA Award of Excellence', 'text' => 'ESV Nnaji Nnamdi Ikechukwu honoured with the Award of Excellence by the Estate Management Student Association (EMSA), Abia State Polytechnic.'],
                         ['title' => 'Judicial Commission Commendation', 'text' => 'Justice I. Hwande Commission of Inquiry: "NNAJI O.A & COMPANY rendered good stewardship... They are therefore commended."'],
-                        ['title' => 'UNN Alumni Award of Excellence', 'text' => 'Chief O. A. Nnaji honoured with the 1994 Plaque of Excellence by the University of Nigeria Alumni Association.'],
-                        ['title' => 'NIESV State Branch Honour', 'text' => 'Honoured with the 2007 Plaque of NIESV Kaduna State Branch for immense contributions to the profession.'],
+                        ['title' => 'UNN Alumni & NIESV Honours', 'text' => 'Founding Principal Chief O. A. Nnaji honoured with the UNN Alumni Plaque of Excellence and NIESV Kaduna State Branch Honour.'],
                     ] as $i => $honour)
                         <div class="card-lift bg-white p-6 rounded-2xl border border-ivory-border shadow-sm relative overflow-hidden" style="--i: {{ $i }}">
                             <div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-gold-400 to-gold-500/20 rounded-r"></div>

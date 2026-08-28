@@ -311,15 +311,15 @@
                         <div class="absolute -inset-6 rounded-3xl border border-gold-400/10 -z-20"></div>
                         
                         <div class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" alt="Chief O.A. Nnaji" class="w-full h-full object-cover object-top">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80" alt="ESV Nnaji Nnamdi Ikechukwu (FL1143)" class="w-full h-full object-cover object-top">
                         </div>
                         
                         <!-- Floating credentials card -->
-                        <div class="absolute -bottom-5 -right-3 sm:right-4 bg-forest-900 text-white p-5 rounded-2xl border border-gold-500/40 shadow-xl max-w-[220px]" style="animation: float 4s ease-in-out infinite">
-                            <div class="text-gold-400 font-cinzel font-bold text-[13px]">CHIEF O.A. NNAJI</div>
-                            <div class="text-slate-300 text-[11px] mt-0.5">FNIVS, RSV (F231)</div>
+                        <div class="absolute -bottom-5 -right-3 sm:right-4 bg-forest-900 text-white p-5 rounded-2xl border border-gold-500/40 shadow-xl max-w-[240px]" style="animation: float 4s ease-in-out infinite">
+                            <div class="text-gold-400 font-cinzel font-bold text-[13px]">ESV NNAJI NNAMDI I.</div>
+                            <div class="text-slate-300 text-[11px] mt-0.5">FNIVS, RSV (FL1143)</div>
                             <div class="shimmer-line mt-2 rounded"></div>
-                            <p class="text-[10px] text-slate-400 mt-2">Ex-Knight Frank & Rutley • 40+ Years</p>
+                            <p class="text-[10px] text-slate-300 mt-2 font-medium">Principal Partner & Head of Practice</p>
                         </div>
                     </div>
                 </div>
@@ -329,28 +329,28 @@
                     <p class="text-gold-700 text-xs font-bold uppercase tracking-[0.2em]">Distinguished Leadership</p>
                     
                     <h2 class="heading-serif text-3xl sm:text-4xl font-bold text-slate-900 leading-[1.2]">
-                        Four Decades of Principled Surveying & Asset Valuation
+                        Four Decades of Principled Surveying & Dynamic Leadership
                     </h2>
                     <div class="section-divider-left"></div>
 
                     <p class="text-slate-600 text-[15px] leading-relaxed">
-                        Under <strong class="text-slate-900">Chief Ogwuegbu Agomoh Nnaji</strong> (B.Sc Hons UNN 1974, FNIVS since 1987, RSV since 1978), NNAJI O.A & COMPANY has advised federal ministries, international conglomerates, and tier-1 financial institutions through complex asset restructurings and statutory compensations.
+                        Under the leadership of <strong class="text-slate-900">ESV Nnaji Nnamdi Ikechukwu (FL1143)</strong> (B.Tech FUT Minna, FNIVS, RSV), NNAJI O.A & COMPANY advances into a modern era of precision valuation and corporate real estate advisory. The firm proudly upholds the pioneering heritage, professional discipline, and uncompromising ethics established by its late founder, <strong class="text-slate-900">Chief Ogwuegbu Agomoh Nnaji</strong> (FNIVS, RSV).
                     </p>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div class="card-lift bg-white p-5 rounded-xl border border-ivory-border shadow-sm">
                             <div class="w-9 h-9 rounded-lg bg-gold-100 text-gold-700 flex items-center justify-center mb-3">
-                                <i class="fa-solid fa-gavel"></i>
+                                <i class="fa-solid fa-award"></i>
                             </div>
-                            <h4 class="font-bold text-xs uppercase tracking-wider text-forest-900 mb-1.5">Judicial Commendation</h4>
-                            <p class="text-slate-500 text-xs leading-relaxed">Commended by Justice I. Hwande Commission for exemplary stewardship.</p>
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-forest-900 mb-1.5">EMSA Award of Excellence</h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">Honoured with the Award of Excellence by the Estate Management Student Association (EMSA), Abia State Polytechnic.</p>
                         </div>
                         <div class="card-lift bg-white p-5 rounded-xl border border-ivory-border shadow-sm">
                             <div class="w-9 h-9 rounded-lg bg-gold-100 text-gold-700 flex items-center justify-center mb-3">
-                                <i class="fa-solid fa-award"></i>
+                                <i class="fa-solid fa-gavel"></i>
                             </div>
-                            <h4 class="font-bold text-xs uppercase tracking-wider text-forest-900 mb-1.5">NIESV Gold Honours</h4>
-                            <p class="text-slate-500 text-xs leading-relaxed">UNN Alumni Plaque of Excellence & NIESV Kaduna Branch honours recipient.</p>
+                            <h4 class="font-bold text-xs uppercase tracking-wider text-forest-900 mb-1.5">Judicial Commendation & Legacy</h4>
+                            <p class="text-slate-500 text-xs leading-relaxed">Enduring foundation commended by the Justice I. Hwande Judicial Commission and NIESV honours.</p>
                         </div>
                     </div>
 

@@ -28,10 +28,10 @@
             <!-- 4 Branches -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                 @foreach([
-                    ['icon' => 'fa-landmark', 'label' => 'Operational HQ', 'title' => 'Kaduna Head Office', 'address' => 'Plot No. 7 Yunus Ustaz Usman Road (formerly Zaki Road) Abakpa G.R.A., P.O. Box 1607, Kaduna.', 'phone' => '08035044633', 'person' => 'Chief O. A. Nnaji (FNIVS)', 'featured' => true],
-                    ['icon' => 'fa-building', 'label' => 'Federal Capital Desk', 'title' => 'Abuja Regional Office', 'address' => 'No. 24 Asaris Plaza, Block A, I.T. Igbani Street, Jabi, P.O. Box 9246, Abuja FCT.', 'phone' => '08037002395, 08187666130', 'person' => 'Ikechukwu Nnaji (ANIVS)', 'featured' => false],
-                    ['icon' => 'fa-map-location-dot', 'label' => 'Eastern Regional Desk', 'title' => 'Abia State Branch', 'address' => 'Umuopara by Abia Tower Expressway, P.O. Box 727, Umuahia, Abia State.', 'phone' => '08062854080', 'person' => 'Ikenna Onwumere (B.Tech)', 'featured' => false],
-                    ['icon' => 'fa-globe', 'label' => 'North America Desk', 'title' => 'USA Link Representative', 'address' => '15650 Fenkell Str. Apt. 210, Detroit, MI 48227, United States of America.', 'phone' => '', 'person' => 'Mrs. Chidi Nnaji (MBA)', 'featured' => false],
+                    ['icon' => 'fa-building', 'label' => 'Practice & Regional Desk', 'title' => 'Abuja Regional Office', 'address' => 'Block 07, Drive 1, Prince and Princess Estate, Abuja, FCT.', 'phone' => '08037002395, 08187666130', 'person' => 'ESV Nnaji Nnamdi Ikechukwu (FNIVS)', 'featured' => true],
+                    ['icon' => 'fa-landmark', 'label' => 'Founding Head Office', 'title' => 'Kaduna Head Office', 'address' => 'Plot No. 7 Yunus Ustaz Usman Road (formerly Zaki Road) Abakpa G.R.A., P.O. Box 1607, Kaduna.', 'phone' => '08037002395, 08187666130', 'person' => 'ESV Alh. Salisu M. Yahaya Pai', 'featured' => false],
+                    ['icon' => 'fa-map-location-dot', 'label' => 'Eastern Regional Desk', 'title' => 'Abia State Branch', 'address' => 'Umuopara by Abia Tower Expressway, P.O. Box 727, Umuahia, Abia State.', 'phone' => '08037002395, 08187666130', 'person' => 'ESV Ikenna Onwumere (B.Tech)', 'featured' => false],
+                    ['icon' => 'fa-globe', 'label' => 'North America Desk', 'title' => 'USA Link Representative', 'address' => '15650 Fenkell Str. Apt. 210, Detroit, MI 48227, United States of America.', 'phone' => 'nnajioacompany@gmail.com', 'person' => 'Mrs. Chidi Nnaji (MBA)', 'featured' => false],
                 ] as $i => $branch)
                     <div class="card-lift bg-white rounded-2xl p-6 {{ $branch['featured'] ? 'border-2 border-gold-500/40 shadow-md' : 'border border-ivory-border/80 shadow-sm' }} flex flex-col justify-between reveal relative overflow-hidden" style="--i: {{ $i }}">
                         @if($branch['featured'])

@@ -223,11 +223,11 @@
                         <!-- Surveyor Contact Box -->
                         <div class="mt-6 pt-4 border-t border-slate-100 text-center text-xs">
                             <span class="text-slate-500 block mb-1">Prefer instant telephone dispatch?</span>
-                            <a href="tel:08035044633" class="text-forest-900 font-bold font-mono hover:text-gold-700 text-sm">
-                                <i class="fa-solid fa-phone text-gold-600 mr-1"></i> 08035044633 (Kaduna HQ)
+                            <a href="tel:08037002395" class="text-forest-900 font-bold font-mono hover:text-gold-700 text-sm">
+                                <i class="fa-solid fa-phone text-gold-600 mr-1"></i> 08037002395 (Abuja Practice Desk)
                             </a>
-                            <a href="tel:08037002395" class="text-forest-900 font-bold font-mono hover:text-gold-700 text-sm block mt-1">
-                                <i class="fa-solid fa-phone text-gold-600 mr-1"></i> 08037002395 (Abuja Office)
+                            <a href="tel:08187666130" class="text-forest-900 font-bold font-mono hover:text-gold-700 text-sm block mt-1">
+                                <i class="fa-solid fa-phone text-gold-600 mr-1"></i> 08187666130 (Direct Client Line)
                             </a>
                         </div>
                     </div>

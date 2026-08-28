@@ -103,7 +103,7 @@
                         </a>
 
                         <div class="text-center text-xs text-slate-400 space-y-2 pt-2 border-t border-forest-800">
-                            <div><i class="fa-solid fa-phone text-gold-400 mr-1"></i> 08035044633 / 08037002395</div>
+                            <div><i class="fa-solid fa-phone text-gold-400 mr-1"></i> 08037002395 / 08187666130</div>
                             <div><i class="fa-solid fa-envelope text-gold-400 mr-1"></i> nnajioacompany@gmail.com</div>
                         </div>
                     </div>

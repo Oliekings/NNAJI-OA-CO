@@ -43,11 +43,18 @@ class PropertyLifecycleAndWebTest extends TestCase
 
         $response = $this->get('/team');
         $response->assertStatus(200);
+        $response->assertSee('ESV Nnaji Nnamdi Ikechukwu');
+        $response->assertSee('FL1143');
         $response->assertSee('Chief Ogwuegbu Agomoh Nnaji');
+        $response->assertSee('Fakaa Tersoo Matthew');
+        $response->assertSee('ESV Sabe Terungwa');
 
         $response = $this->get('/contact');
         $response->assertStatus(200);
         $response->assertSee('Kaduna Head Office');
+        $response->assertSee('Prince and Princess Estate');
+        $response->assertSee('08037002395');
+        $response->assertSee('08187666130');
 
         $response = $this->get('/request-valuation');
         $response->assertStatus(200);

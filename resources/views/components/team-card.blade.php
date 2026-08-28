@@ -6,8 +6,11 @@
         @if($member->avatar)
             <img src="{{ $member->avatar }}" alt="{{ $member->name }}" class="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110">
         @else
-            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-forest-900 to-forest-950 text-gold-400/60">
-                <i class="fa-solid fa-user-tie text-5xl"></i>
+            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-forest-900 via-forest-950 to-forest-900 text-gold-400 p-6 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gold-400/10 border border-gold-400/30 flex items-center justify-center mb-2 shadow-inner">
+                    <span class="brand-crest text-gold-300 font-bold text-lg">NOA</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold text-gold-400/80 tracking-widest">In Memoriam</span>
             </div>
         @endif
 

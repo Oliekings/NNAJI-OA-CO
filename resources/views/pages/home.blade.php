@@ -311,7 +311,7 @@
                         <div class="absolute -inset-6 rounded-3xl border border-gold-400/10 -z-20"></div>
                         
                         <div class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80" alt="ESV Nnaji Nnamdi Ikechukwu (FL1143)" class="w-full h-full object-cover object-top">
+                            <img src="/storage/team/esv-nnaji-nnamdi-ikechukwu.webp" alt="ESV Nnaji Nnamdi Ikechukwu (FL1143)" class="w-full h-full object-cover object-top">
                         </div>
                         
                         <!-- Floating credentials card -->

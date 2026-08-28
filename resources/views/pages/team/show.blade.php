@@ -37,8 +37,11 @@
                             @if($member->avatar)
                                 <img src="{{ $member->avatar }}" alt="{{ $member->name }}" class="w-full h-full object-cover object-top">
                             @else
-                                <div class="w-full h-full flex items-center justify-center text-gold-400">
-                                    <i class="fa-solid fa-user-tie text-6xl"></i>
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-forest-900 via-forest-950 to-forest-900 text-gold-400 p-8 text-center">
+                                    <div class="w-20 h-20 rounded-2xl bg-gold-400/10 border border-gold-400/30 flex items-center justify-center mb-3 shadow-inner">
+                                        <span class="brand-crest text-gold-300 font-bold text-2xl">NOA</span>
+                                    </div>
+                                    <span class="text-xs uppercase font-bold text-gold-400/80 tracking-widest">In Memoriam</span>
                                 </div>
                             @endif
                         </div>

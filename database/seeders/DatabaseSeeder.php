@@ -268,7 +268,7 @@ class DatabaseSeeder extends Seeder
                     'Benue State Government Industries Privatization Valuations',
                 ],
                 'special_skills' => ['Facility Operations', 'Viability Studies', 'Industrial Asset Registers'],
-                'avatar' => 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
+                'avatar' => '/storage/team/esv-sabe-terungwa.webp',
                 'is_partner' => true,
                 'sort_order' => 3,
             ],

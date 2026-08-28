@@ -18,6 +18,7 @@ class HomeController extends Controller
 
         $services = Service::active()->take(6)->get();
         $partners = TeamMember::partners()->get();
+        $principalPartner = $partners->first() ?? TeamMember::orderBy('sort_order', 'asc')->first();
         $closedDealsCount = Property::closedDeals()->count();
         $activePropertiesCount = Property::active()->count();
 
@@ -28,6 +29,7 @@ class HomeController extends Controller
             'featuredProperties',
             'services',
             'partners',
+            'principalPartner',
             'closedDealsCount',
             'activePropertiesCount',
             'spotlightClosedDeals'

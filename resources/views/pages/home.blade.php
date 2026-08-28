@@ -310,16 +310,20 @@
                         <div class="absolute -inset-3 rounded-3xl border-2 border-gold-400/20 -z-10"></div>
                         <div class="absolute -inset-6 rounded-3xl border border-gold-400/10 -z-20"></div>
                         
-                        <div class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-                            <img src="/storage/team/esv-nnaji-nnamdi-ikechukwu.webp" alt="ESV Nnaji Nnamdi Ikechukwu (FL1143)" class="w-full h-full object-cover object-top">
+                        <div class="w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-forest-950">
+                            @if($principalPartner && $principalPartner->avatar)
+                                <img src="{{ str_starts_with($principalPartner->avatar, 'http') ? $principalPartner->avatar : asset($principalPartner->avatar) }}" alt="{{ $principalPartner->name }} ({{ $principalPartner->registration_no }})" class="w-full h-full object-cover object-top">
+                            @else
+                                <img src="{{ asset('images/team/esv-nnaji-nnamdi-ikechukwu.webp') }}" alt="ESV Nnaji Nnamdi Ikechukwu (FL1143)" class="w-full h-full object-cover object-top">
+                            @endif
                         </div>
                         
                         <!-- Floating credentials card -->
                         <div class="absolute -bottom-5 -right-3 sm:right-4 bg-forest-900 text-white p-5 rounded-2xl border border-gold-500/40 shadow-xl max-w-[240px]" style="animation: float 4s ease-in-out infinite">
-                            <div class="text-gold-400 font-cinzel font-bold text-[13px]">ESV NNAJI NNAMDI I.</div>
-                            <div class="text-slate-300 text-[11px] mt-0.5">FNIVS, RSV (FL1143)</div>
+                            <div class="text-gold-400 font-cinzel font-bold text-[13px]">{{ $principalPartner ? strtoupper($principalPartner->name) : 'ESV NNAJI NNAMDI I.' }}</div>
+                            <div class="text-slate-300 text-[11px] mt-0.5">{{ $principalPartner->cadre ?? 'FNIVS, RSV' }} ({{ $principalPartner->registration_no ?? 'FL1143' }})</div>
                             <div class="shimmer-line mt-2 rounded"></div>
-                            <p class="text-[10px] text-slate-300 mt-2 font-medium">Principal Partner & Head of Practice</p>
+                            <p class="text-[10px] text-slate-300 mt-2 font-medium">{{ $principalPartner->designation ?? 'Principal Partner & Head of Practice' }}</p>
                         </div>
                     </div>
                 </div>

@@ -4,12 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Service;
-use App\Models\TeamMember;
 use App\Models\Property;
-use App\Models\Inquiry;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,7 +25,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Seed Services
+        // 2. Seed Core Practice Services
         $services = [
             [
                 'title' => 'Property & Asset Valuation',
@@ -155,265 +152,11 @@ class DatabaseSeeder extends Seeder
             Service::updateOrCreate(['slug' => $serviceData['slug']], $serviceData);
         }
 
-        // 3. Seed Team Members (Real Profiles Extracted from Firm Records)
-        TeamMember::query()->delete();
+        // 3. Team members are managed exclusively by the user via the Admin CMS.
+        // Seeder does NOT create or overwrite team profiles.
 
-        $teamMembers = [
-            [
-                'name' => 'ESV Nnaji Nnamdi Ikechukwu',
-                'slug' => 'esv-nnaji-nnamdi-ikechukwu',
-                'designation' => 'Principal Partner & Head of Practice',
-                'cadre' => 'Fellow (FNIVS)',
-                'registration_no' => 'FL1143',
-                'qualifications' => 'B.Tech (Estate Mgt, FUT Minna 2002), FNIVS, RSV',
-                'experience_years' => '20+ Years',
-                'branch_location' => 'Abuja Practice Desk (Block 07, Drive 1, Prince and Princess Estate)',
-                'phone' => '08037002395, 08187666130',
-                'email' => 'nnajioacompany@gmail.com',
-                'bio' => "ESV Nnaji Nnamdi Ikechukwu (FL1143) is the Principal Partner and Head of Practice of NNAJI O.A & COMPANY, directing the firm's national practice and strategic expansion while honoring the four-decade foundation established by his late father, Chief Ogwuegbu Agomoh Nnaji.\n\nA Fellow of the Nigerian Institution of Estate Surveyors and Valuers (FNIVS) and registered with ESVRBON, he has spearheaded landmark statutory and commercial asset valuation mandates across Nigeria for AMCON, NDPHC, NNPC, Federal Government Landed Properties Commissions of Inquiry, and the Federal Ministry of Power, Works & Housing.\n\nAccolades: Recipient of the prestigious Award of Excellence by the Estate Management Student Association (EMSA), Abia State Polytechnic.",
-                'education' => [
-                    ['school' => 'Federal University of Technology, Minna', 'degree' => 'B.Tech (Estate Management)', 'year' => '2002'],
-                    ['school' => 'Abia State Polytechnic', 'degree' => 'Award of Excellence by EMSA', 'year' => 'Honour'],
-                    ['school' => 'Federal Government College, Kaduna', 'degree' => 'SSCE / WAEC', 'year' => '1994'],
-                ],
-                'career_history' => [
-                    ['role' => 'Principal Partner & Head of Practice', 'company' => 'Nnaji O.A & Company', 'period' => 'Present'],
-                    ['role' => 'Managing / Senior Partner', 'company' => 'Nnaji O.A & Company (Abuja)', 'period' => '2005 - 2024'],
-                    ['role' => 'Valuation Team Lead', 'company' => 'AMCON & FCTA Landed Properties Review', 'period' => '2012 - Date'],
-                ],
-                'key_projects' => [
-                    'Award of Excellence by Estate Management Student Association (EMSA), Abia State Polytechnic',
-                    'Asset Valuation of Integrated Oil & Gas Limited (Tank Farm)',
-                    'Asset Valuation of Bendel Feeds and Flour Mills Limited',
-                    'Valuation of African First Publishers, Awka',
-                    'Ibafon Oil Tank Farm (Calabar Free Trade Zone)',
-                    'Coordinating Consultant on 2nd Niger Bridge Access Road Claimants',
-                ],
-                'special_skills' => [
-                    'Practice Leadership & Corporate Strategy',
-                    'Commercial Plant & Machinery Valuation',
-                    'Oil & Gas Terminal Appraisals',
-                    'Property Portfolio Optimization',
-                    'Real Estate Finance & Turnaround Models',
-                ],
-                'avatar' => '/storage/team/esv-nnaji-nnamdi-ikechukwu.webp',
-                'is_partner' => true,
-                'sort_order' => 1,
-            ],
-            [
-                'name' => 'Chief Ogwuegbu Agomoh Nnaji',
-                'slug' => 'chief-o-a-nnaji',
-                'designation' => 'Founding Principal Partner & Chief Consultant (In Memoriam)',
-                'cadre' => 'Founding Fellow (FNIVS)',
-                'registration_no' => 'F231 / A231',
-                'qualifications' => 'B.Sc (Hons) Estate Mgt (UNN 1974), Dip (Agric Umudike 1965), FNIVS, RSV',
-                'experience_years' => '40+ Years Legacy',
-                'branch_location' => 'Kaduna (Founding Head Office)',
-                'phone' => '08037002395, 08187666130',
-                'email' => 'nnajioacompany@gmail.com',
-                'bio' => "The late Chief Ogwuegbu Agomoh Nnaji (FNIVS, RSV) was the founding Principal Partner and Chief Consultant who established NNAJI O.A & COMPANY in 1981. A distinguished Fellow of the Nigerian Institution of Estate Surveyors and Valuers (FNIVS since 1987) and Registered Surveyor and Valuer (RSV since 1978), he served as Branch Manager at Knight Frank & Rutley (Kaduna & Kano), Head of Estate Division at N.N.D.C. (Properties), Past Chairman of NIESV Kaduna State Branch (1984-1989), and Member of the NIESV National Governing Council.\n\nHis pioneering stewardship, strict adherence to professional ethics, and uncompromising standards created an enduring institutional heritage that continues to inspire the firm under the leadership of his son, ESV Nnaji Nnamdi Ikechukwu.",
-                'education' => [
-                    ['school' => 'University of Nigeria, Nsukka (UNN)', 'degree' => 'B.Sc (Hons) Estate Management (2nd Class Upper)', 'year' => '1971 - 1974'],
-                    ['school' => 'School of Agriculture, Umudike Umuahia', 'degree' => 'Diploma in Tropical Agriculture', 'year' => '1964 - 1965'],
-                ],
-                'career_history' => [
-                    ['role' => 'Founding Principal Consultant', 'company' => 'Nnaji O.A. & Company', 'period' => '1981 - 2024'],
-                    ['role' => 'Property Manager & Head of Estate Division', 'company' => 'New Nigeria Development Company (N.N.D.C. Ltd)', 'period' => '1978 - 1980'],
-                    ['role' => 'Branch Manager', 'company' => 'Knight Frank & Rutley (Nig.) Kaduna', 'period' => '1977 - 1978'],
-                    ['role' => 'Estate Surveyor & Valuer (Kano)', 'company' => 'Knight Frank & Rutley (Nig.) Kano', 'period' => '1975 - 1976'],
-                    ['role' => 'Pupil Land Officer', 'company' => 'Enterprises Promotion Board Lagos (Fed. Min. of Trade & Industry)', 'period' => '1974 - 1975'],
-                    ['role' => 'Asst. Agricultural Superintendent (Seconded to USAID Team)', 'company' => 'Eastern Nigerian Public Service', 'period' => '1966 - 1969'],
-                ],
-                'key_projects' => [
-                    'Valuation of Durbar Hotel Limited, Kaduna',
-                    'Valuation of Jafco Industries Limited & Drinko Industries Ltd',
-                    'Assessment and Payment of Compensation for Kano State Urban Development Board',
-                    'Coordinating Consultancy for Compensation along Owerri-Egbema-Omoku & Enugu-Ikot Ekpene Transmission Lines',
-                    'Valuations for AMCON nationwide and Federal Government Landed Properties Commission of Inquiry',
-                ],
-                'special_skills' => [
-                    'Foundational Practice Standards',
-                    'High-Stakes Asset Valuation',
-                    'Statutory Land Acquisition & Compensation',
-                    'Arbitration & Expert Witness',
-                ],
-                'avatar' => null,
-                'is_partner' => true,
-                'sort_order' => 2,
-            ],
-            [
-                'name' => 'ESV Sabe Terungwa',
-                'slug' => 'esv-sabe-terungwa',
-                'designation' => 'Senior Estate Surveyor & Valuer / Associate Partner',
-                'cadre' => 'Associate (ANIVS)',
-                'registration_no' => 'A3236',
-                'qualifications' => 'B.Tech (ATBU Bauchi 2006), M.Sc Facility Mgt (ABU Zaria in-view), ANIVS, RSV',
-                'experience_years' => '6+ Years',
-                'branch_location' => 'Abuja Regional Office (Prince & Princess Estate)',
-                'phone' => '08037002395, 08187666130',
-                'email' => 'sabeter@gmail.com',
-                'bio' => 'ESV Sabe Terungwa is an accomplished Senior Estate Surveyor & Valuer leading major industrial, corporate valuation, and facility management assignments across the FCT and North-Central regions.',
-                'education' => [
-                    ['school' => 'Ahmadu Bello University Zaria', 'degree' => 'Masters in Facility Management', 'year' => 'In-View'],
-                    ['school' => 'Abubakar Tafawa Balewa University Bauchi', 'degree' => 'B.Tech Estate Management', 'year' => '2006'],
-                ],
-                'career_history' => [
-                    ['role' => 'Senior Estate Surveyor & Valuer', 'company' => 'Nnaji O.A & Company (Abuja)', 'period' => '2015 - Present'],
-                    ['role' => 'Resident Estate Surveyor & Valuer', 'company' => 'Jide Taiwo & Co.', 'period' => '2009 - 2015'],
-                ],
-                'key_projects' => [
-                    'Valuation of Assorted Foods & Beverages Ltd for AMCON',
-                    'Valuation of Nnana Jacobs & Brothers Ltd, Aba for AMCON',
-                    'Integrated Oil and Gas Lagos Valuation',
-                    'Benue State Government Industries Privatization Valuations',
-                ],
-                'special_skills' => ['Facility Operations', 'Viability Studies', 'Industrial Asset Registers'],
-                'avatar' => '/storage/team/esv-sabe-terungwa.webp',
-                'is_partner' => true,
-                'sort_order' => 3,
-            ],
-            [
-                'name' => 'ESV Alh. Salisu Muhammad Yahaya Pai',
-                'slug' => 'esv-salisu-muhammad-yahaya-pai',
-                'designation' => 'Associate Partner',
-                'cadre' => 'Associate (ANIVS)',
-                'registration_no' => 'A2494',
-                'qualifications' => 'HND (Estate Mgt, Kaduna Poly 2000), ANIVS, RSV',
-                'experience_years' => '14+ Years',
-                'branch_location' => 'Kaduna / Northern Region',
-                'phone' => '08037002395, 08187666130',
-                'email' => 'info@nnajioacompany.com',
-                'bio' => 'ESV Alh. Salisu Muhammad Yahaya Pai is an Associate Partner with extensive valuation and land acquisition experience across Northern and Central Nigeria. He served as Branch Secretary of NIESV Kaduna State Branch and has coordinated valuation of major industrial plants, hotels, steel manufacturing facilities, and oil rigs.',
-                'education' => [
-                    ['school' => 'Kaduna Polytechnic, Kaduna', 'degree' => 'Higher National Diploma (Estate Management)', 'year' => '2000'],
-                    ['school' => 'Kaduna Polytechnic, Kaduna', 'degree' => 'National Diploma (Estate Management)', 'year' => '1997'],
-                ],
-                'career_history' => [
-                    ['role' => 'Associate Partner', 'company' => 'Nnaji O.A & Company', 'period' => '2007 - Present'],
-                    ['role' => 'Branch Secretary', 'company' => 'NIESV Kaduna State Branch', 'period' => '2010 - 2014'],
-                ],
-                'key_projects' => [
-                    'Valuation of Bougainvilla Hotels, Port Harcourt (AMCON)',
-                    'Valuation of Sparkwest Steel Industries, Lagos',
-                    'Index Petrolube Mainstreet-Africa Ltd Assets',
-                    'Flotsome Investment Limited (Dredgers & Marine Equipment)',
-                    'D.W.C Drilling Limited (Land Oil Rigs Valuation)',
-                ],
-                'special_skills' => [
-                    'Heavy Machinery & Drilling Rig Valuations',
-                    'Public Sector Land Acquisition',
-                    'Municipal Property Rating',
-                ],
-                'avatar' => '/storage/team/esv-salisu-pai.webp',
-                'is_partner' => true,
-                'sort_order' => 4,
-            ],
-            [
-                'name' => 'Fakaa Tersoo Matthew',
-                'slug' => 'fakaa-tersoo-matthew',
-                'designation' => 'Resident Surveyor',
-                'cadre' => 'Estate Surveyor (M07808, A.7206)',
-                'registration_no' => 'M07808 / A.7206',
-                'qualifications' => 'M.Tech & B.Tech Estate Management & Valuation (ATBU Bauchi)',
-                'experience_years' => '4+ Years',
-                'branch_location' => 'Abuja Regional Office (Block 07, Drive 1, Prince and Princess Estate)',
-                'phone' => '+2349062171188, +2348072043889',
-                'email' => 'takaamatthew@gmail.com',
-                'bio' => "FAKAA TERSOO MATTHEW\nAngwan Siyawa, Off Abuja Electricity Distribution Company Kabusa, FCT Abuja.\nContact: +2349062171188, +2348072043889 | Email: takaamatthew@gmail.com\n\nOBJECTIVE: To diligently, innovatively and creatively meet set goals in an organisation based on academic and professional training and experience in line with global best practice, to carve a niche for an organisation by making things differently, giving it an edge over competitors, to imbibe team spirit in order to create a conducive work environment which enhances efficiency and productivity.\n\nCOMPETENCIES:\n• Training professionals on professional application\n• Valuation of assets of all categories\n• Academic and professional research\n• Assisting in the supervision of academic research\n• Information and communication technology (ICT) skills\n• Facility management\n• Property management\n• Project management\n• Real estate agency",
-                'education' => [
-                    ['school' => 'Abubakar Tafawa Balewa University Bauchi', 'degree' => 'M.Tech Estate Management & Valuation', 'year' => 'Postgraduate'],
-                    ['school' => 'Abubakar Tafawa Balewa University Bauchi', 'degree' => 'B.Tech Estate Management', 'year' => 'Graduate'],
-                ],
-                'career_history' => [
-                    ['role' => 'Resident Surveyor', 'company' => 'Nnaji O.A. & Company (Estate Surveyors & Valuers)', 'period' => 'January 2023 - Present'],
-                    ['role' => 'Resident Surveyor 1', 'company' => 'Kunle Olaniyan & Partners (Chartered Estate Surveyors & Valuers)', 'period' => 'June 2022 - November 2022'],
-                ],
-                'key_projects' => [
-                    'Valuation of assets of all categories for Asset Management Corporation of Nigeria (AMCON)',
-                    'Valuation of assets for National Institute for Legislative and Democratic Studies (NILDS) Abuja',
-                    'Management of all categories of properties for clients within and outside Abuja',
-                    'Training of Estate Surveyors and Valuers on the application of Estate Surveying',
-                    'Preparation of candidates for NIESV Professional Qualifying Examination (PQE) and Professional Practice Examination (PPE)',
-                    'Valuation of a block of 4 units 2-bedroom flat at Hillside Estate, Karu Site, FCT Abuja and disposal of same',
-                    'Valuation of a 3-bedroom bungalow and 4-bedroom bungalow at House 2, Cooperative Avenue, Dafara Area, Kuje, Abuja',
-                    'Valuation of a parcel of land at Road 3 Phase 4, Nyanya, Abuja',
-                ],
-                'special_skills' => [
-                    'AMCON & NILDS Asset Valuations',
-                    'Facility & Property Management',
-                    'NIESV PQE & PPE Candidate Training',
-                    'ICT & Valuation Research',
-                ],
-                'avatar' => 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
-                'is_partner' => false,
-                'sort_order' => 5,
-            ],
-            [
-                'name' => 'ESV Ikenna Nmezu Onwumere',
-                'slug' => 'ikenna-nmezu-onwumere',
-                'designation' => 'Branch Head / Estate Surveyor',
-                'cadre' => 'Probationer (G06267)',
-                'registration_no' => 'G06267',
-                'qualifications' => 'B.Tech Estate Management (FUT Minna 2006), Cert Deutsch (Goethe)',
-                'experience_years' => '5+ Years',
-                'branch_location' => 'Abia State Branch (Umuahia)',
-                'phone' => '08037002395, 08187666130',
-                'email' => 'ikenna_nmezu@yahoo.com',
-                'bio' => 'Ikenna Onwumere leads the Abia State Branch operations. Prior to his current post, he held relationship and mortgage credit advisory roles at Fidelity Bank Plc and ASO Savings & Loans Plc.',
-                'education' => [
-                    ['school' => 'Federal University of Technology Minna', 'degree' => 'B.Tech Estate Management', 'year' => '2000 - 2006'],
-                ],
-                'career_history' => [
-                    ['role' => 'Branch Head / Surveyor', 'company' => 'Nnaji O.A & Company (Abia / Abuja)', 'period' => '2015 - Present'],
-                    ['role' => 'Retail Relationship Manager', 'company' => 'Fidelity Bank Plc', 'period' => '2013 - 2014'],
-                    ['role' => 'Credit / Mortgage Consultant', 'company' => 'ASO Savings and Loans Plc (Port Harcourt)', 'period' => '2008 - 2012'],
-                ],
-                'key_projects' => [
-                    'Mortgage valuations for Keystone Bank Plc customers',
-                    '₦200M construction finance facility for Yenagoa Gardens Estate, Bayelsa',
-                    'Second Niger Bridge Access Road compensation claimant surveys',
-                ],
-                'special_skills' => ['Mortgage Finance', 'Client Advisory', 'Alternative Real Estate Financing'],
-                'avatar' => 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80',
-                'is_partner' => false,
-                'sort_order' => 6,
-            ],
-            [
-                'name' => 'Mrs. Chidi Nnaji',
-                'slug' => 'mrs-chidi-nnaji',
-                'designation' => 'Diaspora Link Representative (USA)',
-                'cadre' => 'International Affiliate',
-                'registration_no' => 'USA-DET-01',
-                'qualifications' => 'HND (Estate Mgt), PGD, MBA (Management)',
-                'experience_years' => '12+ Years',
-                'branch_location' => 'Detroit, Michigan, USA',
-                'phone' => '+1 (313) 555-0194',
-                'email' => 'usa@nnajioacompany.com',
-                'bio' => 'Mrs. Chidi Nnaji coordinates real estate investment advisory, diaspora asset valuation inquiries, and cross-border investor services based in Detroit, Michigan.',
-                'education' => [
-                    ['school' => 'Wayne State University / Regional Program', 'degree' => 'MBA Management', 'year' => '2011'],
-                ],
-                'career_history' => [
-                    ['role' => 'USA Link Director', 'company' => 'Nnaji O.A & Company', 'period' => '2012 - Present'],
-                ],
-                'key_projects' => [
-                    'Diaspora Investment Acquisitions in Abuja & Lagos',
-                    'Cross-Border Asset Verification for North American Clients',
-                ],
-                'special_skills' => ['Diaspora Investment', 'International Client Relations'],
-                'avatar' => '/storage/team/mrs-chidi-nnaji.webp',
-                'is_partner' => false,
-                'sort_order' => 7,
-            ],
-        ];
-
-        foreach ($teamMembers as $teamData) {
-            TeamMember::create($teamData);
-        }
-
-        // 4. Seed Properties (Active Listings & Closed Deals for Property Lifecycle Automation)
+        // 4. Seed Real Properties Only
         $properties = [
-            // --- ACTIVE LISTINGS ---
             [
                 'title' => 'Prime Commercial Plot (8,464 sqm) — Central Area (Cadastral Zone A00)',
                 'slug' => 'prime-commercial-plot-central-area-8464sqm',
@@ -442,7 +185,7 @@ class DatabaseSeeder extends Seeder
                     'Dual Access Road Infrastructure',
                     'Immediate Development Readiness'
                 ],
-                'featured_image' => '/storage/properties/central-area-commercial-plot-survey.png',
+                'featured_image' => '/images/properties/central-area-commercial-plot-survey.png',
                 'status' => 'available',
                 'is_featured' => true,
                 'sort_order' => 1,
@@ -475,7 +218,7 @@ class DatabaseSeeder extends Seeder
                     'Fast-Appreciating High-Demand Corridor',
                     'Direct & Unencumbered Allocation'
                 ],
-                'featured_image' => '/storage/properties/jahi-district-plot-366-survey.jpg',
+                'featured_image' => '/images/properties/jahi-district-plot-366-survey.jpg',
                 'status' => 'available',
                 'is_featured' => true,
                 'sort_order' => 2,
@@ -509,196 +252,54 @@ class DatabaseSeeder extends Seeder
                     'Ample Parking for 10+ Vehicles',
                     'Diplomatic Enclave Location'
                 ],
-                'featured_image' => '/storage/properties/maitama-6bed-duplex-exterior.jpg',
+                'featured_image' => '/images/properties/maitama-6bed-duplex-exterior.jpg',
                 'gallery_images' => [
-                    '/storage/properties/maitama-plot-734-survey-plan.jpg'
+                    '/images/properties/maitama-plot-734-survey-plan.jpg'
                 ],
                 'status' => 'available',
                 'is_featured' => true,
                 'sort_order' => 3,
             ],
-            // --- CLOSED DEALS & PORTFOLIO ARCHIVES (Historical Valuations / Disposals from PDF) ---
             [
-                'title' => 'Durbar Hotel Limited Commercial & Hospitality Asset Valuation',
-                'slug' => 'durbar-hotel-limited-asset-valuation',
-                'reference_no' => 'NOA-CL-001',
-                'property_type' => 'Hospitality',
-                'listing_type' => 'valuation_record',
-                'price' => 8500000000.00,
-                'price_prefix' => '₦',
-                'price_unit' => 'Valuation Volume',
-                'location_address' => 'Independence Way / Ahmadu Bello Way',
-                'location_city' => 'Kaduna',
-                'location_state' => 'Kaduna State',
-                'bedrooms' => 320,
-                'bathrooms' => 350,
-                'land_area' => '12.4 Hectares',
-                'building_area' => 'Multi-Tier Tower & Banquet Complex',
-                'description' => 'Comprehensive statutory valuation of the landmark Durbar Hotel complex including main multi-tier guest towers, conference halls, industrial laundry facilities, power generating station, and extensive grounds.',
-                'features' => [
-                    'Statutory Balance Sheet Valuation',
-                    'Inventory Coding of Fixed Assets',
-                    'Land & Structures Assessment',
-                ],
-                'featured_image' => 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
-                'gallery_images' => [],
-                'status' => 'sold', // CLOSED DEAL
-                'sold_price' => 8500000000.00,
-                'sold_date' => '2019-11-15',
-                'client_name' => 'Durbar Hotel Limited / Ministry of Commerce',
-                'transaction_summary' => 'Executed complete comprehensive asset valuation and fixed asset register coding totaling over ₦8.5 Billion.',
-                'is_featured' => true,
-                'sort_order' => 10,
-            ],
-            [
-                'title' => 'Integrated Oil & Gas Limited Petroleum Tank Farm & Marine Jetty',
-                'slug' => 'integrated-oil-gas-tank-farm-valuation',
-                'reference_no' => 'NOA-CL-002',
-                'property_type' => 'Industrial',
-                'listing_type' => 'valuation_record',
-                'price' => 12000000000.00,
-                'price_prefix' => '₦',
-                'price_unit' => 'Valuation Volume',
-                'location_address' => 'Free Trade Zone Corridor',
-                'location_city' => 'Calabar & Lagos Ports',
-                'location_state' => 'Cross River / Lagos State',
-                'bedrooms' => null,
-                'bathrooms' => null,
-                'land_area' => '18 Hectares Waterfront',
-                'building_area' => 'Storage Tanks & Gantry Loading Bays',
-                'description' => 'Valuation of major coastal petroleum storage tank farm facilities, loading gantries, pipeline connections, fire suppression systems, and heavy marine berthing infrastructure for AMCON and corporate financing.',
-                'features' => [
-                    'Specialized Oil & Gas Tangible Assets Appraisal',
-                    'Pipeline & Pumping Station Valuation',
-                    'AMCON Resolution Portfolio Advisory',
-                ],
-                'featured_image' => 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
-                'gallery_images' => [],
-                'status' => 'sold', // CLOSED DEAL
-                'sold_price' => 12000000000.00,
-                'sold_date' => '2018-06-20',
-                'client_name' => 'Asset Management Corporation of Nigeria (AMCON)',
-                'transaction_summary' => 'Comprehensive specialized plant, pipeline and marine terminal valuation executed for AMCON.',
-                'is_featured' => true,
-                'sort_order' => 11,
-            ],
-            [
-                'title' => 'Bougainville Hotel Asset Valuation & Acquisition Advisory',
-                'slug' => 'bougainville-hotel-port-harcourt-valuation',
-                'reference_no' => 'NOA-CL-003',
-                'property_type' => 'Hospitality',
-                'listing_type' => 'valuation_record',
+                'title' => 'PRICE SLASHED FOR IMMEDIATE PURCHASE: 3-Floor Office Complex (36 Suites), Zone 1 Wuse',
+                'slug' => 'price-slashed-3-floor-office-complex-36-suites-zone-1-wuse',
+                'reference_no' => 'NOA-WUS-001',
+                'property_type' => 'Commercial',
+                'listing_type' => 'for_sale',
                 'price' => 3200000000.00,
                 'price_prefix' => '₦',
-                'price_unit' => 'Appraised Value',
-                'location_address' => 'GRA Phase II',
-                'location_city' => 'Port Harcourt',
-                'location_state' => 'Rivers State',
-                'bedrooms' => 110,
-                'bathrooms' => 125,
-                'land_area' => '6,200 sqm',
-                'building_area' => 'Luxury Hospitality Facility',
-                'description' => 'Full asset valuation of hotel real estate, commercial fixtures, swimming pool, banquet halls, and central air systems for AMCON restructuring.',
-                'features' => [
-                    'Hospitality Going-Concern Valuation',
-                    'AMCON Portfolio Assessment',
-                    'FFE (Furniture, Fixtures & Equipment) Register',
-                ],
-                'featured_image' => 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80',
-                'gallery_images' => [],
-                'status' => 'sold', // CLOSED DEAL
-                'sold_price' => 3200000000.00,
-                'sold_date' => '2017-09-12',
-                'client_name' => 'Asset Management Corporation of Nigeria (AMCON)',
-                'transaction_summary' => 'Full valuation of prime hospitality asset and corporate facility review.',
-                'is_featured' => false,
-                'sort_order' => 12,
-            ],
-            [
-                'title' => 'Wema Bank Building Complex (Former National Bank) Multi-Storey Tower',
-                'slug' => 'wema-bank-building-complex-letting-management',
-                'reference_no' => 'NOA-CL-004',
-                'property_type' => 'Commercial',
-                'listing_type' => 'for_lease',
-                'price' => 3300000000.00,
-                'price_prefix' => '₦',
-                'price_unit' => 'Portfolio Value',
-                'location_address' => 'Commercial District',
-                'location_city' => 'Kaduna',
-                'location_state' => 'Kaduna State',
+                'price_unit' => 'net',
+                'location_address' => 'Zone 1, Wuse District',
+                'location_city' => 'Wuse Zone 1, Abuja',
+                'location_state' => 'Abuja FCT',
                 'bedrooms' => null,
-                'bathrooms' => 32,
-                'land_area' => '3,500 sqm',
-                'building_area' => '8-Floor Commercial Tower',
-                'description' => 'Long-term corporate letting and property management mandate for a landmark 8-storey banking and commercial office complex spanning 2001 to 2020.',
+                'bathrooms' => 36,
+                'land_area' => 'Ample Commercial Grounds',
+                'building_area' => '3-Floor Complex (36 Suites)',
+                'title_document' => 'Certificate of Occupancy (C of O)',
+                'description' => "PRICE SLASHED FOR IMMEDIATE PURCHASE.\n\nAn executive commercial office complex developed on 3 floors comprising 36 self-contained suites located in the prestigious Zone 1, Wuse, Abuja.\n\nTITLE: Certificate of Occupancy (C of O).\n\nFURTHER DESCRIPTION & HIGHLIGHTS:\n• Good ambiance with serene commercial prestige\n• Highly accessible location with seamless dual-carriage arterial road linkages\n• High profile and secure neighborhood\n• Generously paved grounds on interlocking stones\n• Dedicated high-capacity transformer guaranteeing uninterrupted power\n• 36 spacious office suites suited for corporate headquarters, diplomatic missions, financial institutions, or premier rental yield.",
                 'features' => [
-                    '20-Year Retainer Management',
-                    'Full Occupancy Letting to Corporate Tenants',
-                    'Lift Overhauls & Facility Maintenance',
+                    'Certificate of Occupancy (C of O)',
+                    '3-Floor Commercial Complex (36 Suites)',
+                    'Dedicated High-Capacity Transformer',
+                    'Well Paved on Interlocking Stones',
+                    'Highly Accessible Prime Corridor',
+                    'High Profile Neighborhood',
+                    'Good Ambiance',
+                    'Price Slashed for Immediate Purchase'
                 ],
-                'featured_image' => 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=1200&q=80',
-                'gallery_images' => [],
-                'status' => 'leased', // CLOSED DEAL / LEASED PORTFOLIO
-                'sold_price' => 3300000000.00,
-                'sold_date' => '2020-12-31',
-                'client_name' => 'Wema Bank Plc / National Bank',
-                'transaction_summary' => 'Successfully managed and let 8-floor landmark commercial complex with over 95% average occupancy across two decades.',
+                'featured_image' => '/images/properties/wuse-zone1-office-complex.webp',
+                'gallery_images' => [
+                    '/images/properties/wuse-zone1-office-complex.webp'
+                ],
+                'status' => 'available',
                 'is_featured' => true,
-                'sort_order' => 13,
-            ],
-            [
-                'title' => 'Jafco & Drinko Manufacturing Industrial Facilities Valuation',
-                'slug' => 'jafco-drinko-industrial-liquidation-valuation',
-                'reference_no' => 'NOA-CL-005',
-                'property_type' => 'Industrial',
-                'listing_type' => 'valuation_record',
-                'price' => 4600000000.00,
-                'price_prefix' => '₦',
-                'price_unit' => 'Valuation Total',
-                'location_address' => 'Kudenda Industrial Layout',
-                'location_city' => 'Kaduna',
-                'location_state' => 'Kaduna State',
-                'bedrooms' => null,
-                'bathrooms' => null,
-                'land_area' => '14 Hectares',
-                'building_area' => 'Production Halls & Bottling Lines',
-                'description' => 'Comprehensive liquidation and corporate restructuring valuation covering land, industrial warehouses, automated bottling plants, cold rooms, and distribution fleet.',
-                'features' => [
-                    'Liquidation Statement of Affairs Valuation',
-                    'Automated Industrial Machinery Breakdown',
-                    'Land & Sub-Station Rating Assessment',
-                ],
-                'featured_image' => 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80',
-                'gallery_images' => [],
-                'status' => 'sold', // CLOSED DEAL
-                'sold_price' => 4600000000.00,
-                'sold_date' => '2016-04-18',
-                'client_name' => 'Liquidators / Drinko & Jafco Industries',
-                'transaction_summary' => 'Statutory asset valuation for corporate restructuring and liquidation proceedings.',
-                'is_featured' => false,
-                'sort_order' => 14,
+                'sort_order' => 4,
             ],
         ];
 
         foreach ($properties as $propData) {
             Property::updateOrCreate(['reference_no' => $propData['reference_no']], $propData);
         }
-
-        // 5. Seed Inquiries Sample
-        Inquiry::create([
-            'type' => 'valuation_request',
-            'name' => 'Engr. Donald Adeleke',
-            'email' => 'donald.adeleke@energyholdings.ng',
-            'phone' => '08023456789',
-            'organization' => 'Apex Logistics & Energy Ltd',
-            'subject' => 'Statutory Valuation for Tank Farm & Logistics Depots',
-            'service_category' => 'Property & Asset Valuation',
-            'asset_type' => 'Plant & Machinery / Tank Farm',
-            'asset_location' => 'Port Harcourt / Lagos Ports',
-            'preferred_branch' => 'Abuja Regional Office',
-            'message' => 'We require an urgent certified asset valuation for our petroleum storage tank farm and auxiliary machinery for bank collateral and balance sheet auditing.',
-            'status' => 'new',
-            'admin_notes' => 'Received from web portal. Assign to ESV Ikechukwu Nnaji for initial inspection proposal.',
-        ]);
     }
 }

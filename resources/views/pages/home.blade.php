@@ -16,16 +16,16 @@
                     : asset('images/wuse-zone1-office-complex.webp');
             @endphp
             
-            <!-- Real Property Asset Layer (Dimmed in shadows with soft luxury contrast) -->
+            <!-- Real Property Asset Layer (65% opacity in shadows with rich contrast) -->
             <div class="absolute inset-0 bg-forest-950">
                 <img src="{{ $heroBgImage }}" 
                      alt="Commercial Property Asset" 
-                     class="w-full h-full object-cover object-center scale-105 transition-transform duration-1000 ease-out opacity-35 mix-blend-luminosity brightness-[0.70] contrast-[1.25]">
+                     class="w-full h-full object-cover object-center scale-105 transition-transform duration-1000 ease-out opacity-65 mix-blend-luminosity brightness-[0.75] contrast-[1.20]">
             </div>
 
-            <!-- Deep Forest Green & Gold Vignette Gradients -->
-            <div class="absolute inset-0 bg-gradient-to-r from-forest-950 via-forest-950/85 to-forest-950/60"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-transparent to-forest-950/75"></div>
+            <!-- Deep Forest Green & Gold Vignette Gradients for Text Legibility -->
+            <div class="absolute inset-0 bg-gradient-to-r from-forest-950/95 via-forest-950/80 to-forest-950/45"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-transparent to-forest-950/70"></div>
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gold-500/10 via-transparent to-transparent"></div>
 
             <!-- Subtle organic ambient glows -->

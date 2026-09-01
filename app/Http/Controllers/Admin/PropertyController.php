@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PropertyController extends Controller
@@ -91,7 +92,8 @@ class PropertyController extends Controller
                     82
                 );
             }
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Throwable $e) {
+            Log::error('Featured image upload error: ' . $e->getMessage());
             return back()->withInput()->withErrors(['featured_image_file' => $e->getMessage()]);
         }
 
@@ -106,7 +108,8 @@ class PropertyController extends Controller
                 }
             }
             $validated['gallery_images'] = $galleryImages;
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Throwable $e) {
+            Log::error('Gallery upload error: ' . $e->getMessage());
             return back()->withInput()->withErrors(['gallery_files' => $e->getMessage()]);
         }
 
@@ -137,8 +140,9 @@ class PropertyController extends Controller
             if (empty($validated['featured_image']) && !empty($validated['video_thumbnail'])) {
                 $validated['featured_image'] = $validated['video_thumbnail'];
             }
-        } catch (\InvalidArgumentException $e) {
-            return back()->withInput()->withErrors(['video_file' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            Log::error('Video upload error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['video_file' => 'Video upload error: ' . $e->getMessage()]);
         }
 
         // Process features into array
@@ -156,7 +160,12 @@ class PropertyController extends Controller
             $validated['sold_date'] = now()->toDateString();
         }
 
-        $property = Property::create($validated);
+        try {
+            $property = Property::create($validated);
+        } catch (\Throwable $e) {
+            Log::error('Property creation database error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['general' => 'Database error: Please ensure migrations are run on the live server (`php artisan migrate --force`). Details: ' . $e->getMessage()]);
+        }
 
         return redirect()->route('admin.properties.index')->with('success', "Property listing '{$property->title}' created successfully.");
     }
@@ -209,7 +218,8 @@ class PropertyController extends Controller
                     82
                 );
             }
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Throwable $e) {
+            Log::error('Featured image update error: ' . $e->getMessage());
             return back()->withInput()->withErrors(['featured_image_file' => $e->getMessage()]);
         }
 
@@ -224,7 +234,8 @@ class PropertyController extends Controller
                 }
                 $validated['gallery_images'] = $existingGallery;
             }
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Throwable $e) {
+            Log::error('Gallery update error: ' . $e->getMessage());
             return back()->withInput()->withErrors(['gallery_files' => $e->getMessage()]);
         }
 
@@ -255,8 +266,9 @@ class PropertyController extends Controller
             if (empty($validated['featured_image']) && empty($property->featured_image) && !empty($validated['video_thumbnail'])) {
                 $validated['featured_image'] = $validated['video_thumbnail'];
             }
-        } catch (\InvalidArgumentException $e) {
-            return back()->withInput()->withErrors(['video_file' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            Log::error('Video update error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['video_file' => 'Video upload error: ' . $e->getMessage()]);
         }
 
         if (!empty($validated['features'])) {
@@ -272,7 +284,12 @@ class PropertyController extends Controller
             $validated['sold_date'] = now()->toDateString();
         }
 
-        $property->update($validated);
+        try {
+            $property->update($validated);
+        } catch (\Throwable $e) {
+            Log::error('Property update database error: ' . $e->getMessage());
+            return back()->withInput()->withErrors(['general' => 'Database error: Please ensure migrations are run on the live server (`php artisan migrate --force`). Details: ' . $e->getMessage()]);
+        }
 
         return redirect()->route('admin.properties.index')->with('success', "Property '{$property->title}' updated successfully.");
     }

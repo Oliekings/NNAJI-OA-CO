@@ -143,7 +143,7 @@ class ImageUploadService
         imagedestroy($sourceImage);
         imagedestroy($canvas);
 
-        // Return public URL path
-        return Storage::url($relativeStoragePath);
+        // Return clean root-relative storage URL path (e.g. "/storage/properties/uuid.webp")
+        return '/storage/' . ltrim($relativeStoragePath, '/');
     }
 }

@@ -39,6 +39,11 @@ class Service extends Model
         });
     }
 
+    public function getFeaturedImageAttribute(?string $value): ?string
+    {
+        return \App\Support\MediaUrl::normalize($value);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true)->orderBy('sort_order', 'asc');

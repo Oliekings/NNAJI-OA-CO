@@ -48,6 +48,11 @@ class TeamMember extends Model
         });
     }
 
+    public function getAvatarAttribute(?string $value): ?string
+    {
+        return \App\Support\MediaUrl::normalize($value);
+    }
+
     public function scopePartners($query)
     {
         return $query->where('is_partner', true)->orderBy('sort_order', 'asc');

@@ -118,6 +118,16 @@ class Property extends Model
         };
     }
 
+    public function getFeaturedImageAttribute(?string $value): ?string
+    {
+        return \App\Support\MediaUrl::normalize($value);
+    }
+
+    public function getGalleryImagesAttribute($value): array
+    {
+        return \App\Support\MediaUrl::normalizeArray($value);
+    }
+
     public function inquiries()
     {
         return $this->hasMany(Inquiry::class);

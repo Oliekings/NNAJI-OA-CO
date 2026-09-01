@@ -308,17 +308,19 @@
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-shield-halved text-gold-400"></i> NIESV Corporate Member</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-stamp text-gold-400"></i> ESVRBON Reg No. F231</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-earth-americas text-gold-400"></i> CASLE International Affiliate</span>
-                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-phone text-gold-400"></i> 08037002395, 08187666130</span>
+                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-phone text-gold-400"></i> 0805 139 7435, 08037002395</span>
+                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-globe text-gold-400"></i> USA: +1 313-651-6685</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-envelope text-gold-400"></i> nnajioacompany@gmail.com</span>
-                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-map-pin text-gold-400"></i> Abuja • Kaduna HQ • Abia • Detroit USA</span>
+                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-map-pin text-gold-400"></i> Kaduna HQ • Abuja • Abia • Detroit USA</span>
                 <!-- Duplicate for seamless loop -->
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-certificate text-gold-400"></i> Registered Estate Surveyors & Valuers (Est. 1981)</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-shield-halved text-gold-400"></i> NIESV Corporate Member</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-stamp text-gold-400"></i> ESVRBON Reg No. F231</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-earth-americas text-gold-400"></i> CASLE International Affiliate</span>
-                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-phone text-gold-400"></i> 08037002395, 08187666130</span>
+                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-phone text-gold-400"></i> 0805 139 7435, 08037002395</span>
+                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-globe text-gold-400"></i> USA: +1 313-651-6685</span>
                 <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-envelope text-gold-400"></i> nnajioacompany@gmail.com</span>
-                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-map-pin text-gold-400"></i> Abuja • Kaduna HQ • Abia • Detroit USA</span>
+                <span class="inline-flex items-center gap-1.5 px-4"><i class="fa-solid fa-map-pin text-gold-400"></i> Kaduna HQ • Abuja • Abia • Detroit USA</span>
             </div>
         </div>
     </div>
@@ -439,8 +441,8 @@
                 <a href="{{ route('request-valuation') }}" class="px-8 py-4 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-forest-950 font-bold text-xs uppercase tracking-wider hover:from-gold-400 hover:to-gold-300 transition-all duration-300 shadow-lg hover:shadow-gold inline-flex items-center gap-2">
                     <i class="fa-solid fa-file-signature"></i> Request Valuation
                 </a>
-                <a href="tel:08037002395" class="px-8 py-4 rounded-xl border border-gold-500/40 text-gold-300 font-bold text-xs uppercase tracking-wider hover:bg-forest-800 transition inline-flex items-center gap-2">
-                    <i class="fa-solid fa-phone"></i> Call 08037002395
+                <a href="tel:08051397435" class="px-8 py-4 rounded-xl border border-gold-500/40 text-gold-300 font-bold text-xs uppercase tracking-wider hover:bg-forest-800 transition inline-flex items-center gap-2">
+                    <i class="fa-solid fa-phone"></i> Call 0805 139 7435 / 08037002395
                 </a>
             </div>
         </div>
@@ -495,31 +497,31 @@
                     </ul>
                 </div>
 
-                <!-- Branch Network -->
+                <!-- Branch Network (Kaduna Head Office First) -->
                 <div class="lg:col-span-2 space-y-5">
                     <h4 class="text-white font-semibold text-xs tracking-wider uppercase mb-5 flex items-center gap-2">
                         <span class="w-5 h-[2px] bg-gold-500"></span> Office Network
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="group p-3.5 rounded-xl bg-forest-900/60 border border-gold-500/30 hover:border-gold-500/50 transition-colors duration-300 shadow-sm">
+                            <span class="text-gold-400 font-bold text-[11px] block mb-1">Kaduna Head Office</span>
+                            <p class="text-slate-400 text-[11px] leading-relaxed">Plot 7 Yunus Ustaz Usman Rd, Abakpa G.R.A.</p>
+                            <p class="text-gold-300 text-[10px] font-mono mt-1 font-semibold">0805 139 7435, 08037002395</p>
+                        </div>
                         <div class="group p-3.5 rounded-xl bg-forest-900/40 border border-forest-800/40 hover:border-gold-500/30 transition-colors duration-300">
-                            <span class="text-gold-400 font-bold text-[11px] block mb-1">Abuja Office</span>
-                            <p class="text-slate-500 text-[11px] leading-relaxed">Block 07, Drive 1, Prince and Princess Estate, Abuja, FCT.</p>
+                            <span class="text-gold-400 font-bold text-[11px] block mb-1">Abuja Regional Office</span>
+                            <p class="text-slate-500 text-[11px] leading-relaxed">Block 07, Drive 1, Prince & Princess Estate, FCT.</p>
                             <p class="text-gold-500/60 text-[10px] font-mono mt-1">08037002395, 08187666130</p>
                         </div>
                         <div class="group p-3.5 rounded-xl bg-forest-900/40 border border-forest-800/40 hover:border-gold-500/30 transition-colors duration-300">
-                            <span class="text-gold-400 font-bold text-[11px] block mb-1">Kaduna Office</span>
-                            <p class="text-slate-500 text-[11px] leading-relaxed">Plot 7 Yunus Ustaz Usman Rd, Abakpa G.R.A.</p>
+                            <span class="text-gold-400 font-bold text-[11px] block mb-1">Abia State Branch</span>
+                            <p class="text-slate-500 text-[11px] leading-relaxed">Umuopara by Abia Tower Expressway, Umuahia.</p>
                             <p class="text-gold-500/60 text-[10px] font-mono mt-1">08037002395, 08187666130</p>
                         </div>
                         <div class="group p-3.5 rounded-xl bg-forest-900/40 border border-forest-800/40 hover:border-gold-500/30 transition-colors duration-300">
-                            <span class="text-gold-400 font-bold text-[11px] block mb-1">Abia State</span>
-                            <p class="text-slate-500 text-[11px] leading-relaxed">Umuopara by Abia Tower Expressway</p>
-                            <p class="text-gold-500/60 text-[10px] font-mono mt-1">08037002395, 08187666130</p>
-                        </div>
-                        <div class="group p-3.5 rounded-xl bg-forest-900/40 border border-forest-800/40 hover:border-gold-500/30 transition-colors duration-300">
-                            <span class="text-gold-400 font-bold text-[11px] block mb-1">USA Link</span>
-                            <p class="text-slate-500 text-[11px] leading-relaxed">15650 Fenkell Str, Detroit, MI</p>
-                            <p class="text-gold-500/60 text-[10px] font-mono mt-1">North America Desk</p>
+                            <span class="text-gold-400 font-bold text-[11px] block mb-1">USA Representative Desk</span>
+                            <p class="text-slate-500 text-[11px] leading-relaxed">15650 Fenkell Str, Detroit, MI 48227, USA.</p>
+                            <p class="text-gold-400 text-[10px] font-mono mt-1 font-semibold">+1 313-651-6685</p>
                         </div>
                     </div>
                 </div>

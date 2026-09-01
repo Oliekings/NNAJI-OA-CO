@@ -26,6 +26,7 @@ class Property extends Model
         'bathrooms',
         'land_area',
         'building_area',
+        'title_document',
         'description',
         'features',
         'featured_image',

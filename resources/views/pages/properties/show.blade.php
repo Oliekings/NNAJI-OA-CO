@@ -200,7 +200,7 @@
                             </div>
                             <div class="bg-forest-50 p-3 rounded-xl border border-forest-100">
                                 <span class="text-[11px] text-slate-500 block uppercase font-bold">Title Document</span>
-                                <span class="text-sm font-bold text-forest-900">Registered C of O</span>
+                                <span class="text-sm font-bold text-forest-900">{{ $property->title_document ?? 'Certificate of Occupancy (C of O)' }}</span>
                             </div>
                         </div>
                     </div>

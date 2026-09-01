@@ -150,6 +150,29 @@
                         <input type="text" name="land_area" value="{{ old('land_area', $property->land_area) }}" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800">
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Building / Gross Floor Area</label>
+                        <input type="text" name="building_area" value="{{ old('building_area', $property->building_area) }}" placeholder="e.g. 1,800 sqm, 36 Suites across 3 Floors" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Title Document *</label>
+                        <input type="text" list="title_doc_options_edit" name="title_document" value="{{ old('title_document', $property->title_document ?? 'Certificate of Occupancy (C of O)') }}" placeholder="e.g. Certificate of Occupancy (C of O), Governor's Consent" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800">
+                        <datalist id="title_doc_options_edit">
+                            <option value="Certificate of Occupancy (C of O)">
+                            <option value="Right of Occupancy (R of O)">
+                            <option value="Governor's Consent">
+                            <option value="Deed of Assignment">
+                            <option value="Federal C of O">
+                            <option value="Registered Conveyance">
+                            <option value="Gazette">
+                            <option value="Excision">
+                            <option value="Letter of Allocation">
+                            <option value="Customary Grant">
+                        </datalist>
+                    </div>
+                </div>
             </div>
 
             <!-- Description & Image -->

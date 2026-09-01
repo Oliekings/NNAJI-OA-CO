@@ -200,4 +200,25 @@ class PropertyLifecycleAndWebTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('test-tank-farm.mp4');
     }
+
+    public function test_title_document_field_and_custom_options()
+    {
+        $property = Property::create([
+            'title' => 'Prime Waterfront Commercial Plot with Governor Consent',
+            'property_type' => 'Land',
+            'listing_type' => 'for_sale',
+            'price' => 1500000000.00,
+            'location_city' => 'Victoria Island',
+            'location_state' => 'Lagos',
+            'title_document' => "Governor's Consent & Registered Deed",
+            'description' => 'Direct prime commercial waterfront land ready for high-rise tower construction.',
+            'status' => 'available',
+        ]);
+
+        $this->assertEquals("Governor's Consent & Registered Deed", $property->title_document);
+
+        $response = $this->get('/properties/' . $property->slug);
+        $response->assertStatus(200);
+        $response->assertSee("Governor's Consent & Registered Deed");
+    }
 }

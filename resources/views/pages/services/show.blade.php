@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', $service->title . ' | NNAJI O.A & COMPANY')
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($service->short_description ?? $service->full_description), 160))
+@section('og_image', $service->featured_image ? $service->featured_image : asset('images/og-share-banner.jpg'))
 
 @section('content')
 

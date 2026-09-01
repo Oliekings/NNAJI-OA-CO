@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', $member->name . ' | NNAJI O.A & COMPANY')
+@section('meta_description', \Illuminate\Support\Str::limit(strip_tags($member->bio), 160))
+@section('og_image', $member->avatar ? $member->avatar : asset('images/og-share-banner.jpg'))
 
 @section('content')
 

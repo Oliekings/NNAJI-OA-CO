@@ -5,7 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'NNAJI O.A & COMPANY | Estate Surveyors & Valuers')</title>
-    <meta name="description" content="@yield('meta_description', 'NNAJI O.A & COMPANY - Premier Nigerian firm of Estate Surveyors & Valuers established in 1981. Over ₦50B+ in asset valuations, property management, and corporate real estate advisory.')">
+    <meta name="description" content="@yield('meta_description', 'NNAJI O.A & COMPANY - Premier Nigerian firm of Estate Surveyors & Valuers established in 1981. Over 40+ years in asset valuations, plant & machinery appraisal, and real estate advisory.')">
+
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=3">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}?v=3">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+    <meta name="theme-color" content="#061b13">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp Social Share -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:site_name" content="NNAJI O.A & COMPANY">
+    <meta property="og:title" content="@yield('title', 'NNAJI O.A & COMPANY | Estate Surveyors & Valuers')">
+    <meta property="og:description" content="@yield('meta_description', 'NNAJI O.A & COMPANY - Premier Nigerian firm of Estate Surveyors & Valuers established in 1981. Over 40+ years in asset valuations, plant & machinery appraisal, and real estate advisory.')">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-share-banner.jpg'))">
+    <meta property="og:image:secure_url" content="@yield('og_image', asset('images/og-share-banner.jpg'))">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="NNAJI O.A & COMPANY Brand Banner">
+
+    <!-- Twitter / X Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="@yield('title', 'NNAJI O.A & COMPANY | Estate Surveyors & Valuers')">
+    <meta name="twitter:description" content="@yield('meta_description', 'NNAJI O.A & COMPANY - Premier Nigerian firm of Estate Surveyors & Valuers established in 1981. Over 40+ years in asset valuations, plant & machinery appraisal, and real estate advisory.')">
+    <meta name="twitter:image" content="@yield('og_image', asset('images/og-share-banner.jpg'))">
 
     <!-- Google Fonts: Playfair Display + Plus Jakarta Sans + Cinzel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

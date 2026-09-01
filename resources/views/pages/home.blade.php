@@ -8,13 +8,29 @@
          1. HERO — Full-bleed immersive hero with parallax texture
     ════════════════════════════════════════════════════════════════ -->
     <section class="relative bg-forest-950 text-white overflow-hidden min-h-[85vh] flex items-center border-b border-gold-500/20">
-        <!-- Multi-layer background -->
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=2000&q=85" alt="Commercial Architecture" class="w-full h-full object-cover opacity-20 scale-105" style="filter: brightness(0.6) contrast(1.1);">
-            <div class="absolute inset-0 bg-gradient-to-br from-forest-950 via-forest-950/95 to-forest-900/80"></div>
-            <!-- Organic diagonal gold accent -->
-            <div class="absolute -bottom-20 -right-20 w-[600px] h-[600px] rounded-full bg-gold-400/[0.03] blur-3xl"></div>
-            <div class="absolute top-20 -left-40 w-[400px] h-[400px] rounded-full bg-forest-600/[0.06] blur-3xl"></div>
+        <!-- Multi-layer background with dim atmospheric property imagery in shadows -->
+        <div class="absolute inset-0 z-0 overflow-hidden">
+            @php
+                $heroBgImage = ($featuredProperties->first() && $featuredProperties->first()->featured_image) 
+                    ? $featuredProperties->first()->featured_image 
+                    : asset('images/wuse-zone1-office-complex.webp');
+            @endphp
+            
+            <!-- Real Property Asset Layer (Dimmed in shadows with soft luxury contrast) -->
+            <div class="absolute inset-0 bg-forest-950">
+                <img src="{{ $heroBgImage }}" 
+                     alt="Commercial Property Asset" 
+                     class="w-full h-full object-cover object-center scale-105 transition-transform duration-1000 ease-out opacity-35 mix-blend-luminosity brightness-[0.70] contrast-[1.25]">
+            </div>
+
+            <!-- Deep Forest Green & Gold Vignette Gradients -->
+            <div class="absolute inset-0 bg-gradient-to-r from-forest-950 via-forest-950/85 to-forest-950/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-forest-950 via-transparent to-forest-950/75"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gold-500/10 via-transparent to-transparent"></div>
+
+            <!-- Subtle organic ambient glows -->
+            <div class="absolute -bottom-20 -right-20 w-[600px] h-[600px] rounded-full bg-gold-400/[0.04] blur-3xl pointer-events-none"></div>
+            <div class="absolute top-20 -left-40 w-[400px] h-[400px] rounded-full bg-forest-600/[0.08] blur-3xl pointer-events-none"></div>
         </div>
 
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0 w-full">

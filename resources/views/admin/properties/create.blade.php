@@ -57,14 +57,23 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Price (₦ Naira) *</label>
-                        <input type="number" step="0.01" name="price" value="{{ old('price') }}" placeholder="e.g. 750000000" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Currency *</label>
+                        <select name="price_prefix" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 bg-white">
+                            <option value="₦" {{ old('price_prefix', '₦') === '₦' ? 'selected' : '' }}>NGN (₦) - Nigerian Naira</option>
+                            <option value="$" {{ old('price_prefix') === '$' ? 'selected' : '' }}>USD ($) - US Dollar</option>
+                            <option value="€" {{ old('price_prefix') === '€' ? 'selected' : '' }}>EUR (€) - Euro</option>
+                            <option value="£" {{ old('price_prefix') === '£' ? 'selected' : '' }}>GBP (£) - British Pound</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Price (Amount)</label>
+                        <input type="number" step="0.01" name="price" value="{{ old('price') }}" placeholder="e.g. 750000000 or 1500000" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Price Unit / Suffix</label>
-                        <input type="text" name="price_unit" value="{{ old('price_unit', 'total') }}" placeholder="e.g. total, per annum, POA" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
+                        <input type="text" name="price_unit" value="{{ old('price_unit', 'total') }}" placeholder="e.g. total, net, per annum, POA" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">
                     </div>
                 </div>
             </div>

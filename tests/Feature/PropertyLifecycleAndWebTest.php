@@ -125,4 +125,54 @@ class PropertyLifecycleAndWebTest extends TestCase
             'status' => 'new',
         ]);
     }
+
+    public function test_multi_currency_property_listings()
+    {
+        $usdProperty = Property::create([
+            'title' => 'Diplomatic Residence in Maitama (USD)',
+            'property_type' => 'Residential',
+            'listing_type' => 'for_sale',
+            'price' => 2500000.00,
+            'price_prefix' => '$',
+            'price_unit' => 'net',
+            'location_city' => 'Abuja',
+            'location_state' => 'Abuja FCT',
+            'description' => 'Luxury diplomatic residence offered in US Dollars.',
+            'status' => 'available',
+        ]);
+
+        $eurProperty = Property::create([
+            'title' => 'Commercial European Headquarters (EUR)',
+            'property_type' => 'Commercial',
+            'listing_type' => 'for_lease',
+            'price' => 450000.00,
+            'price_prefix' => '€',
+            'price_unit' => 'per annum',
+            'location_city' => 'Victoria Island',
+            'location_state' => 'Lagos',
+            'description' => 'Grade A commercial hub offered in Euros.',
+            'status' => 'available',
+        ]);
+
+        $gbpProperty = Property::create([
+            'title' => 'Mayfair-Style Penthouse (GBP)',
+            'property_type' => 'Residential',
+            'listing_type' => 'for_sale',
+            'price' => 1200000.00,
+            'price_prefix' => '£',
+            'price_unit' => 'total',
+            'location_city' => 'Ikoyi',
+            'location_state' => 'Lagos',
+            'description' => 'Executive penthouse offered in British Pounds.',
+            'status' => 'available',
+        ]);
+
+        $this->assertEquals('$2,500,000 net', $usdProperty->formatted_price);
+        $this->assertEquals('€450,000 per annum', $eurProperty->formatted_price);
+        $this->assertEquals('£1,200,000 total', $gbpProperty->formatted_price);
+
+        $response = $this->get('/properties/' . $usdProperty->slug);
+        $response->assertStatus(200);
+        $response->assertSee('$2,500,000 net');
+    }
 }

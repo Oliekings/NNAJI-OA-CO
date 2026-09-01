@@ -76,12 +76,32 @@ class Property extends Model
         return $query->where('is_featured', true);
     }
 
+    public function getCurrencySymbolAttribute(): string
+    {
+        return match(strtoupper(trim($this->price_prefix ?? '₦'))) {
+            '$', 'USD', 'DOLLAR', 'DOLLARS' => '$',
+            '€', 'EUR', 'EURO', 'EUROS' => '€',
+            '£', 'GBP', 'POUND', 'POUNDS' => '£',
+            default => $this->price_prefix ?: '₦',
+        };
+    }
+
+    public function getCurrencyCodeAttribute(): string
+    {
+        return match(strtoupper(trim($this->price_prefix ?? '₦'))) {
+            '$', 'USD', 'DOLLAR', 'DOLLARS' => 'USD',
+            '€', 'EUR', 'EURO', 'EUROS' => 'EUR',
+            '£', 'GBP', 'POUND', 'POUNDS' => 'GBP',
+            default => 'NGN',
+        };
+    }
+
     public function getFormattedPriceAttribute(): string
     {
         if (!$this->price || $this->price == 0) {
             return 'Price on Application (POA)';
         }
-        $formatted = '₦' . number_format($this->price, 0, '.', ',');
+        $formatted = $this->currency_symbol . number_format($this->price, 0, '.', ',');
         if ($this->price_unit) {
             $formatted .= ' ' . $this->price_unit;
         }
@@ -91,7 +111,7 @@ class Property extends Model
     public function getFormattedSoldPriceAttribute(): ?string
     {
         if (!$this->sold_price) return null;
-        return '₦' . number_format($this->sold_price, 0, '.', ',');
+        return $this->currency_symbol . number_format($this->sold_price, 0, '.', ',');
     }
 
     public function getStatusBadgeClassAttribute(): string

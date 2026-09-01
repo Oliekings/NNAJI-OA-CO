@@ -2,9 +2,9 @@
 
 <div class="group card-lift bg-white rounded-2xl overflow-hidden border border-ivory-border/80 shadow-sm flex flex-col h-full">
     <!-- Member Avatar -->
-    <div class="relative h-64 overflow-hidden bg-forest-950">
+    <div class="relative h-72 sm:h-80 overflow-hidden bg-forest-950">
         @if($member->avatar)
-            <img src="{{ $member->avatar }}" alt="{{ $member->name }}" class="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-110">
+            <img src="{{ $member->avatar }}" alt="{{ $member->name }}" class="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105">
         @else
             <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-forest-900 via-forest-950 to-forest-900 text-gold-400 p-6 text-center">
                 <div class="w-16 h-16 rounded-2xl bg-gold-400/10 border border-gold-400/30 flex items-center justify-center mb-2 shadow-inner">

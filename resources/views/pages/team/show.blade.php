@@ -35,9 +35,22 @@
                 <!-- Left Sidebar Avatar & Contact Card (4 cols) -->
                 <div class="lg:col-span-4 space-y-6">
                     <div class="bg-white rounded-3xl overflow-hidden border border-ivory-border shadow-md">
-                        <div class="h-80 bg-forest-900">
+                        <div class="relative bg-forest-950 group/avatar cursor-pointer overflow-hidden {{ $member->avatar ? 'min-h-[420px] sm:min-h-[480px] flex items-center justify-center p-3' : 'h-80' }}"
+                             @if($member->avatar) data-lightbox-src="{{ $member->avatar }}" data-title="{{ $member->name }} • {{ $member->designation }}" @endif>
                             @if($member->avatar)
-                                <img src="{{ $member->avatar }}" alt="{{ $member->name }}" class="w-full h-full object-cover object-top">
+                                <!-- Ambient portrait backdrop blur -->
+                                <div class="absolute inset-0 opacity-25 blur-2xl scale-125 pointer-events-none" style="background-image: url('{{ $member->avatar }}'); background-size: cover; background-position: center;"></div>
+                                
+                                <!-- Fully visible uncropped portrait -->
+                                <img src="{{ $member->avatar }}" alt="{{ $member->name }}" class="relative z-10 w-full h-auto max-h-[520px] object-contain rounded-2xl shadow-2xl transition-transform duration-500 group-hover/avatar:scale-[1.02]">
+
+                                <!-- Interactive zoom indicator -->
+                                <div class="absolute bottom-4 inset-x-0 flex justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
+                                    <span class="px-3.5 py-1.5 rounded-full bg-forest-900/90 backdrop-blur-md text-gold-300 border border-gold-500/40 text-xs font-bold shadow-xl flex items-center gap-1.5 transform scale-95 group-hover/avatar:scale-100 transition-transform">
+                                        <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                                        <span>Click to view full photo</span>
+                                    </span>
+                                </div>
                             @else
                                 <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-forest-900 via-forest-950 to-forest-900 text-gold-400 p-8 text-center">
                                     <div class="w-20 h-20 rounded-2xl bg-gold-400/10 border border-gold-400/30 flex items-center justify-center mb-3 shadow-inner">

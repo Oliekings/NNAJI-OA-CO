@@ -18,26 +18,27 @@ class MediaUrl
         $url = trim($url);
 
         // 1. Detect if the URL contains /storage/ with any foreign or placeholder host
-        // e.g. https://your-domain.com/storage/properties/abc.webp or http://localhost/storage/team/xyz.webp
         if (preg_match('#https?://[^/]+/storage/(.+)#i', $url, $matches)) {
-            return asset('storage/' . ltrim($matches[1], '/'));
+            $subpath = ltrim($matches[1], '/');
+            return self::resolveAssetPath($subpath, 'storage');
         }
 
         // 2. Detect if the URL contains /images/ with any foreign or placeholder host
         if (preg_match('#https?://[^/]+/images/(.+)#i', $url, $matches)) {
-            return asset('images/' . ltrim($matches[1], '/'));
+            $subpath = ltrim($matches[1], '/');
+            return self::resolveAssetPath($subpath, 'images');
         }
 
         // 3. Handle root-relative /storage/ path
         if (str_starts_with($url, '/storage/') || str_starts_with($url, 'storage/')) {
-            $cleaned = preg_replace('#^/?storage/#', '', $url);
-            return asset('storage/' . ltrim($cleaned, '/'));
+            $subpath = preg_replace('#^/?storage/#', '', $url);
+            return self::resolveAssetPath($subpath, 'storage');
         }
 
         // 4. Handle root-relative /images/ path
         if (str_starts_with($url, '/images/') || str_starts_with($url, 'images/')) {
-            $cleaned = preg_replace('#^/?images/#', '', $url);
-            return asset('images/' . ltrim($cleaned, '/'));
+            $subpath = preg_replace('#^/?images/#', '', $url);
+            return self::resolveAssetPath($subpath, 'images');
         }
 
         // 5. Keep legitimate third-party external URLs (e.g. Unsplash or CDNs)
@@ -46,7 +47,33 @@ class MediaUrl
         }
 
         // 6. Default to asset URL
-        return asset(ltrim($url, '/'));
+        return self::resolveAssetPath(ltrim($url, '/'), 'storage');
+    }
+
+    /**
+     * Resolve whether an asset is located in public/images or public/storage/app/public.
+     */
+    private static function resolveAssetPath(string $subpath, string $preferredPrefix = 'storage'): string
+    {
+        $cleanSubpath = ltrim($subpath, '/');
+
+        // Check if file exists in public/images/
+        if (file_exists(public_path('images/' . $cleanSubpath))) {
+            return asset('images/' . $cleanSubpath);
+        }
+
+        // Check if file exists in public/storage/
+        if (file_exists(public_path('storage/' . $cleanSubpath))) {
+            return asset('storage/' . $cleanSubpath);
+        }
+
+        // Check if file exists in storage/app/public/
+        if (file_exists(storage_path('app/public/' . $cleanSubpath))) {
+            return asset('storage/' . $cleanSubpath);
+        }
+
+        // Default fallback
+        return asset($preferredPrefix . '/' . $cleanSubpath);
     }
 
     /**

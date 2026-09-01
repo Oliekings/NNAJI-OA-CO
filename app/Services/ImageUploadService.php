@@ -139,9 +139,18 @@ class ImageUploadService
 
         @chmod($absoluteDestinationPath, 0664);
 
-        // Free GD memory
-        imagedestroy($sourceImage);
-        imagedestroy($canvas);
+        // Mirror to public/images for shared host resilience
+        $publicDir = public_path('images/' . trim($directory, '/'));
+        if (!is_dir($publicDir)) {
+            @mkdir($publicDir, 0775, true);
+        }
+        @copy($absoluteDestinationPath, $publicDir . '/' . $safeFilename);
+
+        // Free GD memory if PHP < 8.0
+        if (PHP_VERSION_ID < 80000) {
+            @imagedestroy($sourceImage);
+            @imagedestroy($canvas);
+        }
 
         // Return clean root-relative storage URL path (e.g. "/storage/properties/uuid.webp")
         return '/storage/' . ltrim($relativeStoragePath, '/');

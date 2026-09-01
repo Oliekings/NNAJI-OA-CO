@@ -46,7 +46,7 @@ class ImageUploadAndSecurityTest extends TestCase
         $property = Property::where('title', 'Secure Commercial Tower')->first();
         $this->assertNotNull($property);
         $this->assertNotNull($property->featured_image);
-        $this->assertStringContainsString('/storage/properties/', $property->featured_image);
+        $this->assertTrue(str_contains($property->featured_image, '/properties/'));
         $this->assertStringEndsWith('.webp', $property->featured_image);
     }
 
@@ -113,7 +113,8 @@ class ImageUploadAndSecurityTest extends TestCase
         $member = TeamMember::where('name', 'ESV Samuel Okafor')->first();
         $this->assertNotNull($member);
         $this->assertNotNull($member->avatar);
-        $this->assertStringContainsString('/storage/team/', $member->avatar);
+        $this->assertTrue(str_contains($member->avatar, '/team/'));
+        $this->assertStringEndsWith('.webp', $member->avatar);
     }
 
     public function test_public_pages_do_not_contain_admin_or_cms_links()

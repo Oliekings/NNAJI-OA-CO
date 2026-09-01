@@ -145,6 +145,30 @@
                     <p class="text-[11px] text-slate-500">Select multiple files to upload into the property dossier gallery.</p>
                 </div>
 
+                <!-- Video Media Upload (Optional or Standalone) -->
+                <div class="bg-forest-950/5 p-4 rounded-xl border border-forest-800/20 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-bold text-forest-950">
+                            <i class="fa-solid fa-video text-gold-600 mr-1"></i> Property Video Tour / Walkthrough (Auto-Compressed)
+                        </label>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-forest-800 bg-forest-100 px-2 py-0.5 rounded">Video Media</span>
+                    </div>
+                    <input type="file" name="video_file" accept=".mp4,.webm,.mov,.ogg,.ogv,.m4v,.avi,.3gp" class="block w-full text-xs text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-forest-900 file:text-gold-300 hover:file:bg-forest-800 cursor-pointer">
+                    <p class="text-[11px] text-slate-500">
+                        Upload walkthrough or drone footage (.mp4, .webm, .mov). Videos are automatically compressed for bandwidth efficiency. If a property has no images, this video will serve as the primary media.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Or paste video embed / direct URL:</label>
+                            <input type="text" name="video_url" value="{{ old('video_url') }}" placeholder="https://..." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-forest-800 focus:outline-none bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Custom Video Poster Thumbnail (Optional):</label>
+                            <input type="file" name="video_thumbnail_file" accept=".jpg,.jpeg,.png,.webp" class="block w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Key Features (One per line or comma-separated)</label>
                     <textarea name="features" rows="3" placeholder="Certificate of Occupancy&#10;500kVA Dedicated Generator&#10;Central Air Conditioning" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800 focus:outline-none">{{ old('features') }}</textarea>

@@ -48,7 +48,7 @@ class PropertyController extends Controller
         return view('admin.properties.create');
     }
 
-    public function store(Request $request, \App\Services\ImageUploadService $imageService)
+    public function store(Request $request, \App\Services\ImageUploadService $imageService, \App\Services\VideoUploadService $videoService)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -69,6 +69,9 @@ class PropertyController extends Controller
             'featured_image' => 'nullable|string',
             'featured_image_file' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
             'gallery_files.*' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
+            'video_url' => 'nullable|string|max:255',
+            'video_file' => 'nullable|file|mimes:mp4,webm,mov,ogg,ogv,m4v,avi,3gp|max:102400',
+            'video_thumbnail_file' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
             'status' => 'required|string',
             'sold_price' => 'nullable|numeric|min:0',
             'sold_date' => 'nullable|date',
@@ -77,7 +80,7 @@ class PropertyController extends Controller
             'is_featured' => 'boolean',
         ]);
 
-        // Process image upload if provided
+        // Process image uploads if provided
         try {
             if ($request->hasFile('featured_image_file')) {
                 $validated['featured_image'] = $imageService->uploadAndOptimize(
@@ -87,7 +90,11 @@ class PropertyController extends Controller
                     82
                 );
             }
+        } catch (\InvalidArgumentException $e) {
+            return back()->withInput()->withErrors(['featured_image_file' => $e->getMessage()]);
+        }
 
+        try {
             // Process multiple gallery uploads if provided
             $galleryImages = [];
             if ($request->hasFile('gallery_files')) {
@@ -99,7 +106,38 @@ class PropertyController extends Controller
             }
             $validated['gallery_images'] = $galleryImages;
         } catch (\InvalidArgumentException $e) {
-            return back()->withInput()->withErrors(['featured_image_file' => $e->getMessage()]);
+            return back()->withInput()->withErrors(['gallery_files' => $e->getMessage()]);
+        }
+
+        try {
+            // Process video upload and compression
+            if ($request->hasFile('video_file')) {
+                $videoResult = $videoService->uploadAndCompress(
+                    $request->file('video_file'),
+                    'properties/videos'
+                );
+                $validated['video_url'] = $videoResult['video_url'];
+                if (!empty($videoResult['video_thumbnail'])) {
+                    $validated['video_thumbnail'] = $videoResult['video_thumbnail'];
+                }
+            }
+
+            // Process custom video thumbnail if provided
+            if ($request->hasFile('video_thumbnail_file')) {
+                $validated['video_thumbnail'] = $imageService->uploadAndOptimize(
+                    $request->file('video_thumbnail_file'),
+                    'properties/video-thumbnails',
+                    1600,
+                    82
+                );
+            }
+
+            // If property has video but no featured image, fallback featured image to video thumbnail
+            if (empty($validated['featured_image']) && !empty($validated['video_thumbnail'])) {
+                $validated['featured_image'] = $validated['video_thumbnail'];
+            }
+        } catch (\InvalidArgumentException $e) {
+            return back()->withInput()->withErrors(['video_file' => $e->getMessage()]);
         }
 
         // Process features into array
@@ -127,7 +165,7 @@ class PropertyController extends Controller
         return view('admin.properties.edit', compact('property'));
     }
 
-    public function update(Request $request, Property $property, \App\Services\ImageUploadService $imageService)
+    public function update(Request $request, Property $property, \App\Services\ImageUploadService $imageService, \App\Services\VideoUploadService $videoService)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -148,6 +186,9 @@ class PropertyController extends Controller
             'featured_image' => 'nullable|string',
             'featured_image_file' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
             'gallery_files.*' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
+            'video_url' => 'nullable|string|max:255',
+            'video_file' => 'nullable|file|mimes:mp4,webm,mov,ogg,ogv,m4v,avi,3gp|max:102400',
+            'video_thumbnail_file' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
             'status' => 'required|string',
             'sold_price' => 'nullable|numeric|min:0',
             'sold_date' => 'nullable|date',
@@ -166,7 +207,11 @@ class PropertyController extends Controller
                     82
                 );
             }
+        } catch (\InvalidArgumentException $e) {
+            return back()->withInput()->withErrors(['featured_image_file' => $e->getMessage()]);
+        }
 
+        try {
             // Process additional gallery files if provided
             if ($request->hasFile('gallery_files')) {
                 $existingGallery = $property->gallery_images ?? [];
@@ -178,7 +223,38 @@ class PropertyController extends Controller
                 $validated['gallery_images'] = $existingGallery;
             }
         } catch (\InvalidArgumentException $e) {
-            return back()->withInput()->withErrors(['featured_image_file' => $e->getMessage()]);
+            return back()->withInput()->withErrors(['gallery_files' => $e->getMessage()]);
+        }
+
+        try {
+            // Process video file upload and compression if provided
+            if ($request->hasFile('video_file')) {
+                $videoResult = $videoService->uploadAndCompress(
+                    $request->file('video_file'),
+                    'properties/videos'
+                );
+                $validated['video_url'] = $videoResult['video_url'];
+                if (!empty($videoResult['video_thumbnail'])) {
+                    $validated['video_thumbnail'] = $videoResult['video_thumbnail'];
+                }
+            }
+
+            // Process custom video thumbnail if provided
+            if ($request->hasFile('video_thumbnail_file')) {
+                $validated['video_thumbnail'] = $imageService->uploadAndOptimize(
+                    $request->file('video_thumbnail_file'),
+                    'properties/video-thumbnails',
+                    1600,
+                    82
+                );
+            }
+
+            // If property has video but no featured image, fallback featured image to video thumbnail
+            if (empty($validated['featured_image']) && empty($property->featured_image) && !empty($validated['video_thumbnail'])) {
+                $validated['featured_image'] = $validated['video_thumbnail'];
+            }
+        } catch (\InvalidArgumentException $e) {
+            return back()->withInput()->withErrors(['video_file' => $e->getMessage()]);
         }
 
         if (!empty($validated['features'])) {

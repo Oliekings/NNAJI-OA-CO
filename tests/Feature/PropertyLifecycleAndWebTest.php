@@ -175,4 +175,29 @@ class PropertyLifecycleAndWebTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('$2,500,000 net');
     }
+
+    public function test_video_media_property_listing()
+    {
+        $videoProperty = Property::create([
+            'title' => 'Prime Industrial Tank Farm with Aerial Video',
+            'property_type' => 'Industrial',
+            'listing_type' => 'for_sale',
+            'price' => 8500000000.00,
+            'price_prefix' => '₦',
+            'price_unit' => 'total',
+            'location_city' => 'Calabar',
+            'location_state' => 'Cross River',
+            'description' => 'Industrial deep water port tank farm with dedicated jetty and video walkthrough.',
+            'video_url' => '/storage/properties/videos/test-tank-farm.mp4',
+            'video_thumbnail' => '/storage/properties/videos/test-tank-farm-thumb.webp',
+            'status' => 'available',
+        ]);
+
+        $this->assertTrue($videoProperty->has_video);
+        $this->assertStringContainsString('test-tank-farm-thumb.webp', $videoProperty->display_cover);
+
+        $response = $this->get('/properties/' . $videoProperty->slug);
+        $response->assertStatus(200);
+        $response->assertSee('test-tank-farm.mp4');
+    }
 }

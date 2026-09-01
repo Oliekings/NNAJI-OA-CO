@@ -2,9 +2,16 @@
 
 <div class="group card-lift bg-white rounded-2xl overflow-hidden border border-ivory-border/80 shadow-sm flex flex-col h-full">
     <!-- Property Image & Status Badges -->
-    <div class="relative h-60 overflow-hidden bg-slate-100 group/img cursor-pointer" data-lightbox-src="{{ $property->featured_image }}" data-title="{{ $property->title }}">
-        @if($property->featured_image)
-            <img src="{{ $property->featured_image }}" alt="{{ $property->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+    <div class="relative h-60 overflow-hidden bg-slate-900 group/img cursor-pointer" data-lightbox-src="{{ $property->display_cover ?? $property->featured_image }}" data-title="{{ $property->title }}">
+        @if($property->display_cover)
+            <img src="{{ $property->display_cover }}" alt="{{ $property->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110">
+        @elseif($property->has_video)
+            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-forest-950 via-forest-900 to-forest-950 text-gold-400 p-6 text-center">
+                <div class="w-14 h-14 rounded-full bg-red-600/90 text-white flex items-center justify-center mb-2 shadow-lg group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-play text-lg ml-0.5"></i>
+                </div>
+                <span class="text-[11px] uppercase font-bold tracking-wider text-gold-300">Video Tour Available</span>
+            </div>
         @else
             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-forest-900/10 to-forest-800/5 text-forest-800/40">
                 <i class="fa-solid fa-building text-5xl"></i>
@@ -17,16 +24,26 @@
         <!-- Quick Zoom Icon Button -->
         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 pointer-events-none">
             <span class="px-3.5 py-1.5 rounded-full bg-forest-950/80 backdrop-blur-md text-gold-300 border border-gold-500/40 text-xs font-bold shadow-xl flex items-center gap-1.5 transform scale-90 group-hover/img:scale-100 transition-transform">
-                <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
-                <span>Quick View & Zoom</span>
+                @if($property->has_video)
+                    <i class="fa-solid fa-circle-play text-xs text-red-400"></i>
+                    <span>Watch Video Tour</span>
+                @else
+                    <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                    <span>Quick View & Zoom</span>
+                @endif
             </span>
         </div>
 
-        <!-- Listing Type Badge -->
+        <!-- Listing Type & Video Badge -->
         <div class="absolute top-3.5 left-3.5 flex flex-col gap-1.5 z-10">
             <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-lg bg-forest-900/90 text-gold-300 border border-gold-500/30 backdrop-blur-sm">
                 {{ str_replace('_', ' ', strtoupper($property->listing_type)) }}
             </span>
+            @if($property->has_video)
+                <span class="px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md shadow bg-red-600/95 text-white flex items-center gap-1">
+                    <i class="fa-solid fa-video text-[8px]"></i> Video
+                </span>
+            @endif
             @if($property->is_featured)
                 <span class="px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-md shadow bg-gold-400 text-forest-950">
                     <i class="fa-solid fa-star text-[8px] mr-0.5"></i> Featured

@@ -40,49 +40,103 @@
                 <!-- Left Main Content (8 cols) -->
                 <div class="lg:col-span-8 space-y-8">
                     
-                    <!-- Main Hero Image -->
+                    <!-- Main Hero Image / Video Media -->
                     <div class="bg-white rounded-3xl overflow-hidden border border-ivory-border shadow-md">
-                        <div class="relative h-96 sm:h-[480px] bg-slate-900 group cursor-pointer" data-lightbox-src="{{ $property->featured_image }}" data-title="{{ $property->title }}" data-gallery="property-{{ $property->id }}">
-                            @if($property->featured_image)
+                        @if($property->featured_image)
+                            <div class="relative h-96 sm:h-[480px] bg-slate-900 group cursor-pointer" data-lightbox-src="{{ $property->featured_image }}" data-title="{{ $property->title }}" data-gallery="property-{{ $property->id }}">
                                 <img src="{{ $property->featured_image }}" alt="{{ $property->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-slate-500">
-                                    <i class="fa-solid fa-building text-6xl"></i>
+
+                                <div class="absolute inset-0 bg-gradient-to-t from-forest-950/85 via-forest-950/20 to-transparent"></div>
+                                
+                                <!-- Floating Zoom Enlarge Badge -->
+                                <div class="absolute top-5 right-5 z-10 px-3.5 py-1.5 rounded-full bg-forest-900/90 hover:bg-gold-500 text-gold-300 hover:text-forest-950 border border-gold-500/40 backdrop-blur-md text-xs font-bold transition-all duration-300 flex items-center gap-1.5 shadow-lg group-hover:scale-105">
+                                    <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                                    <span>Click to Enlarge & Zoom</span>
                                 </div>
-                            @endif
 
-                            <div class="absolute inset-0 bg-gradient-to-t from-forest-950/85 via-forest-950/20 to-transparent"></div>
-                            
-                            <!-- Floating Zoom Enlarge Badge -->
-                            <div class="absolute top-5 right-5 z-10 px-3.5 py-1.5 rounded-full bg-forest-900/90 hover:bg-gold-500 text-gold-300 hover:text-forest-950 border border-gold-500/40 backdrop-blur-md text-xs font-bold transition-all duration-300 flex items-center gap-1.5 shadow-lg group-hover:scale-105">
-                                <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
-                                <span>Click to Enlarge & Zoom</span>
-                            </div>
+                                <div class="absolute bottom-6 left-6 right-6 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-4 z-10">
+                                    <div>
+                                        <span class="text-xs uppercase font-bold text-gold-300 tracking-wider block">
+                                            {{ $property->property_type }} &bull; {{ str_replace('_', ' ', strtoupper($property->listing_type)) }}
+                                        </span>
+                                        <h1 class="heading-serif text-2xl sm:text-3xl font-bold text-white mt-1">
+                                            {{ $property->title }}
+                                        </h1>
+                                        <div class="flex items-center text-xs text-slate-300 mt-2">
+                                            <i class="fa-solid fa-location-dot text-gold-400 mr-1.5"></i>
+                                            <span>{{ $property->location_address ? $property->location_address . ', ' : '' }}{{ $property->location_city }}, {{ $property->location_state }}</span>
+                                        </div>
+                                    </div>
 
-                            <div class="absolute bottom-6 left-6 right-6 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-4 z-10">
-                                <div>
-                                    <span class="text-xs uppercase font-bold text-gold-300 tracking-wider block">
-                                        {{ $property->property_type }} &bull; {{ str_replace('_', ' ', strtoupper($property->listing_type)) }}
-                                    </span>
-                                    <h1 class="heading-serif text-2xl sm:text-3xl font-bold text-white mt-1">
-                                        {{ $property->title }}
-                                    </h1>
-                                    <div class="flex items-center text-xs text-slate-300 mt-2">
-                                        <i class="fa-solid fa-location-dot text-gold-400 mr-1.5"></i>
-                                        <span>{{ $property->location_address ? $property->location_address . ', ' : '' }}{{ $property->location_city }}, {{ $property->location_state }}</span>
+                                    <div class="bg-forest-900/90 backdrop-blur-md p-4 rounded-2xl border border-gold-500/40 text-right">
+                                        <span class="text-[10px] uppercase font-bold text-gold-300 tracking-wider block">
+                                            {{ in_array($property->status, ['sold', 'leased']) ? 'Transacted Value' : 'Guide Price / Asking' }}
+                                        </span>
+                                        <span class="text-xl sm:text-2xl font-bold font-cinzel text-white">
+                                            {{ $property->formatted_sold_price ?? $property->formatted_price }}
+                                        </span>
                                     </div>
                                 </div>
-
-                                <div class="bg-forest-900/90 backdrop-blur-md p-4 rounded-2xl border border-gold-500/40 text-right">
-                                    <span class="text-[10px] uppercase font-bold text-gold-300 tracking-wider block">
-                                        {{ in_array($property->status, ['sold', 'leased']) ? 'Transacted Value' : 'Guide Price / Asking' }}
-                                    </span>
-                                    <span class="text-xl sm:text-2xl font-bold font-cinzel text-white">
-                                        {{ $property->formatted_sold_price ?? $property->formatted_price }}
-                                    </span>
+                            </div>
+                        @elseif($property->has_video)
+                            <!-- Video-Only Primary Media Display -->
+                            <div class="relative bg-black rounded-3xl overflow-hidden">
+                                <video controls playsinline class="w-full h-96 sm:h-[480px] object-cover" poster="{{ $property->video_thumbnail }}">
+                                    <source src="{{ $property->video_url }}">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <div class="p-6 bg-forest-950 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                                    <div>
+                                        <span class="text-xs uppercase font-bold text-gold-300 tracking-wider block">
+                                            {{ $property->property_type }} &bull; {{ str_replace('_', ' ', strtoupper($property->listing_type)) }}
+                                        </span>
+                                        <h1 class="heading-serif text-2xl sm:text-3xl font-bold text-white mt-1">
+                                            {{ $property->title }}
+                                        </h1>
+                                        <div class="flex items-center text-xs text-slate-300 mt-2">
+                                            <i class="fa-solid fa-location-dot text-gold-400 mr-1.5"></i>
+                                            <span>{{ $property->location_address ? $property->location_address . ', ' : '' }}{{ $property->location_city }}, {{ $property->location_state }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-forest-900/90 backdrop-blur-md p-4 rounded-2xl border border-gold-500/40 text-right">
+                                        <span class="text-[10px] uppercase font-bold text-gold-300 tracking-wider block">
+                                            {{ in_array($property->status, ['sold', 'leased']) ? 'Transacted Value' : 'Guide Price / Asking' }}
+                                        </span>
+                                        <span class="text-xl sm:text-2xl font-bold font-cinzel text-white">
+                                            {{ $property->formatted_sold_price ?? $property->formatted_price }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="relative min-h-[260px] bg-forest-950 flex flex-col justify-between p-8">
+                                <div class="flex items-center space-x-3 text-gold-400">
+                                    <i class="fa-solid fa-building text-3xl"></i>
+                                    <span class="text-xs uppercase font-bold tracking-widest text-gold-300">
+                                        {{ $property->property_type }} &bull; {{ str_replace('_', ' ', strtoupper($property->listing_type)) }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-6">
+                                    <div>
+                                        <h1 class="heading-serif text-2xl sm:text-3xl font-bold text-white">
+                                            {{ $property->title }}
+                                        </h1>
+                                        <div class="flex items-center text-xs text-slate-300 mt-2">
+                                            <i class="fa-solid fa-location-dot text-gold-400 mr-1.5"></i>
+                                            <span>{{ $property->location_address ? $property->location_address . ', ' : '' }}{{ $property->location_city }}, {{ $property->location_state }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-forest-900/90 p-4 rounded-2xl border border-gold-500/40 text-right">
+                                        <span class="text-[10px] uppercase font-bold text-gold-300 tracking-wider block">
+                                            {{ in_array($property->status, ['sold', 'leased']) ? 'Transacted Value' : 'Guide Price / Asking' }}
+                                        </span>
+                                        <span class="text-xl sm:text-2xl font-bold font-cinzel text-white">
+                                            {{ $property->formatted_sold_price ?? $property->formatted_price }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <!-- Gallery Thumbnails (Clickable with Zoom) -->
                         @if(!empty($property->gallery_images) && is_array($property->gallery_images))
@@ -98,6 +152,33 @@
                             </div>
                         @endif
                     </div>
+
+                    <!-- Video Tour & Walkthrough Section (if video exists with images) -->
+                    @if($property->has_video && $property->featured_image)
+                        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-ivory-border shadow-md space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-forest-900 text-gold-400 flex items-center justify-center shadow-sm">
+                                        <i class="fa-solid fa-video text-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-bold text-forest-950">Video Tour & Walkthrough</h3>
+                                        <p class="text-xs text-slate-500">Live asset inspection footage and aerial perspective</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-lg bg-red-100 text-red-700 border border-red-200">
+                                    <i class="fa-solid fa-circle-play mr-1 text-[9px]"></i> Video Stream
+                                </span>
+                            </div>
+
+                            <div class="rounded-2xl overflow-hidden bg-black shadow-inner border border-slate-200">
+                                <video controls playsinline class="w-full max-h-[500px]" preload="metadata" poster="{{ $property->video_thumbnail ?? $property->featured_image }}">
+                                    <source src="{{ $property->video_url }}">
+                                    Your browser does not support HTML5 video streaming.
+                                </video>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Key Property Specs Summary -->
                     <div class="bg-white rounded-2xl p-6 border border-ivory-border shadow-sm">

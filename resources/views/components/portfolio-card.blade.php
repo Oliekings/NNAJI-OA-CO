@@ -2,9 +2,16 @@
 
 <div class="group card-lift bg-white rounded-2xl overflow-hidden border border-ivory-border/80 shadow-sm flex flex-col h-full">
     <!-- Image & Badges -->
-    <div class="relative h-56 overflow-hidden bg-slate-200 group/img cursor-pointer" data-lightbox-src="{{ $property->featured_image }}" data-title="{{ $property->title }}">
-        @if($property->featured_image)
-            <img src="{{ $property->featured_image }}" alt="{{ $property->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 saturate-[0.85]">
+    <div class="relative h-56 overflow-hidden bg-slate-900 group/img cursor-pointer" data-lightbox-src="{{ $property->display_cover ?? $property->featured_image }}" data-title="{{ $property->title }}">
+        @if($property->display_cover)
+            <img src="{{ $property->display_cover }}" alt="{{ $property->title }}" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 saturate-[0.85]">
+        @elseif($property->has_video)
+            <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-forest-950 via-forest-900 to-forest-950 text-gold-400 p-6 text-center">
+                <div class="w-12 h-12 rounded-full bg-red-600/90 text-white flex items-center justify-center mb-1 shadow-lg">
+                    <i class="fa-solid fa-play text-base ml-0.5"></i>
+                </div>
+                <span class="text-[10px] uppercase font-bold tracking-wider text-gold-300">Video Dossier</span>
+            </div>
         @else
             <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-forest-900/10 to-forest-800/5 text-forest-800/30">
                 <i class="fa-solid fa-file-shield text-5xl"></i>

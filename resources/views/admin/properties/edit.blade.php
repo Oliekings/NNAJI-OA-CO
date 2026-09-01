@@ -201,6 +201,53 @@
                     @endif
                 </div>
 
+                <!-- Video Media Upload & Preview Section -->
+                <div class="bg-forest-950/5 p-4 rounded-xl border border-forest-800/20 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-bold text-forest-950">
+                            <i class="fa-solid fa-video text-gold-600 mr-1"></i> Property Video Tour / Walkthrough (Auto-Compressed)
+                        </label>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-forest-800 bg-forest-100 px-2 py-0.5 rounded">Video Media</span>
+                    </div>
+
+                    @if($property->video_url)
+                        <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Current Video Media</span>
+                                <a href="{{ $property->video_url }}" target="_blank" class="text-[11px] text-gold-700 hover:underline font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Open Video
+                                </a>
+                            </div>
+                            <div class="max-w-md rounded-lg overflow-hidden border border-slate-200 bg-black">
+                                <video controls class="w-full max-h-48" preload="metadata" poster="{{ $property->video_thumbnail ?? $property->featured_image }}">
+                                    <source src="{{ $property->video_url }}">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                            <span class="text-[11px] text-forest-900 font-mono block truncate">{{ $property->video_url }}</span>
+                        </div>
+                    @endif
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-800 mb-1">Upload New Video File (.mp4, .webm, .mov):</label>
+                        <input type="file" name="video_file" accept=".mp4,.webm,.mov,.ogg,.ogv,.m4v,.avi,.3gp" class="block w-full text-xs text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-forest-900 file:text-gold-300 hover:file:bg-forest-800 cursor-pointer">
+                        <p class="text-[11px] text-slate-500 mt-1">
+                            Videos are automatically compressed for web streaming. If this property has no photos, the video and its poster will serve as the primary media.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Or direct video / embed URL:</label>
+                            <input type="text" name="video_url" value="{{ old('video_url', $property->video_url) }}" placeholder="https://..." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-forest-800 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Custom Video Poster Thumbnail (Optional):</label>
+                            <input type="file" name="video_thumbnail_file" accept=".jpg,.jpeg,.png,.webp" class="block w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300 cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Key Features (Newline separated)</label>
                     <textarea name="features" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-forest-800">{{ old('features', is_array($property->features) ? implode("\n", $property->features) : $property->features) }}</textarea>

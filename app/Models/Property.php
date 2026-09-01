@@ -30,6 +30,8 @@ class Property extends Model
         'features',
         'featured_image',
         'gallery_images',
+        'video_url',
+        'video_thumbnail',
         'status',
         'sold_price',
         'sold_date',
@@ -146,6 +148,32 @@ class Property extends Model
     public function getGalleryImagesAttribute($value): array
     {
         return \App\Support\MediaUrl::normalizeArray($value);
+    }
+
+    public function getVideoUrlAttribute(?string $value): ?string
+    {
+        return \App\Support\MediaUrl::normalize($value);
+    }
+
+    public function getVideoThumbnailAttribute(?string $value): ?string
+    {
+        return \App\Support\MediaUrl::normalize($value);
+    }
+
+    public function getHasVideoAttribute(): bool
+    {
+        return !empty($this->video_url);
+    }
+
+    public function getDisplayCoverAttribute(): ?string
+    {
+        if (!empty($this->featured_image)) {
+            return $this->featured_image;
+        }
+        if (!empty($this->video_thumbnail)) {
+            return $this->video_thumbnail;
+        }
+        return null;
     }
 
     public function inquiries()

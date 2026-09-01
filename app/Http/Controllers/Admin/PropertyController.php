@@ -74,6 +74,7 @@ class PropertyController extends Controller
             'video_url' => 'nullable|string|max:255',
             'video_file' => 'nullable|file|mimes:mp4,webm,mov,ogg,ogv,m4v,avi,3gp|max:102400',
             'video_thumbnail_file' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
+            'client_video_thumbnail' => 'nullable|string',
             'status' => 'required|string',
             'sold_price' => 'nullable|numeric|min:0',
             'sold_date' => 'nullable|date',
@@ -126,7 +127,7 @@ class PropertyController extends Controller
                 }
             }
 
-            // Process custom video thumbnail if provided
+            // Process custom video thumbnail file if provided
             if ($request->hasFile('video_thumbnail_file')) {
                 $validated['video_thumbnail'] = $imageService->uploadAndOptimize(
                     $request->file('video_thumbnail_file'),
@@ -134,6 +135,19 @@ class PropertyController extends Controller
                     1600,
                     82
                 );
+            }
+
+            // Process browser client-captured video thumbnail if no thumbnail is set yet
+            if (empty($validated['video_thumbnail']) && $request->filled('client_video_thumbnail')) {
+                $clientThumb = $imageService->saveBase64Image(
+                    $request->input('client_video_thumbnail'),
+                    'properties/video-thumbnails',
+                    1600,
+                    82
+                );
+                if ($clientThumb) {
+                    $validated['video_thumbnail'] = $clientThumb;
+                }
             }
 
             // If property has video but no featured image, fallback featured image to video thumbnail
@@ -200,6 +214,7 @@ class PropertyController extends Controller
             'video_url' => 'nullable|string|max:255',
             'video_file' => 'nullable|file|mimes:mp4,webm,mov,ogg,ogv,m4v,avi,3gp|max:102400',
             'video_thumbnail_file' => 'nullable|file|mimes:jpeg,jpg,png,webp|max:10240',
+            'client_video_thumbnail' => 'nullable|string',
             'status' => 'required|string',
             'sold_price' => 'nullable|numeric|min:0',
             'sold_date' => 'nullable|date',
@@ -252,7 +267,7 @@ class PropertyController extends Controller
                 }
             }
 
-            // Process custom video thumbnail if provided
+            // Process custom video thumbnail file if provided
             if ($request->hasFile('video_thumbnail_file')) {
                 $validated['video_thumbnail'] = $imageService->uploadAndOptimize(
                     $request->file('video_thumbnail_file'),
@@ -260,6 +275,19 @@ class PropertyController extends Controller
                     1600,
                     82
                 );
+            }
+
+            // Process browser client-captured video thumbnail if no thumbnail is set yet
+            if (empty($validated['video_thumbnail']) && empty($property->video_thumbnail) && $request->filled('client_video_thumbnail')) {
+                $clientThumb = $imageService->saveBase64Image(
+                    $request->input('client_video_thumbnail'),
+                    'properties/video-thumbnails',
+                    1600,
+                    82
+                );
+                if ($clientThumb) {
+                    $validated['video_thumbnail'] = $clientThumb;
+                }
             }
 
             // If property has video but no featured image, fallback featured image to video thumbnail

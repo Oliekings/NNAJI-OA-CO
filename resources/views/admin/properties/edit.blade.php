@@ -225,48 +225,104 @@
                 </div>
 
                 <!-- Video Media Upload & Preview Section -->
-                <div class="bg-forest-950/5 p-4 rounded-xl border border-forest-800/20 space-y-3">
+                <div class="bg-forest-950/5 p-4 sm:p-5 rounded-2xl border border-forest-800/20 space-y-4">
                     <div class="flex items-center justify-between">
                         <label class="block text-xs font-bold text-forest-950">
                             <i class="fa-solid fa-video text-gold-600 mr-1"></i> Property Video Tour / Walkthrough (Auto-Compressed)
                         </label>
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-forest-800 bg-forest-100 px-2 py-0.5 rounded">Video Media</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-forest-800 bg-forest-100 px-2.5 py-0.5 rounded-md">Video Media</span>
                     </div>
 
                     @if($property->video_url)
-                        <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-3">
                             <div class="flex items-center justify-between">
-                                <span class="text-[10px] uppercase font-bold text-slate-500">Current Video Media</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Current Video Dossier</span>
                                 <a href="{{ $property->video_url }}" target="_blank" class="text-[11px] text-gold-700 hover:underline font-bold flex items-center gap-1">
-                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Open Video
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Open Fullscreen Video
                                 </a>
                             </div>
-                            <div class="max-w-md rounded-lg overflow-hidden border border-slate-200 bg-black">
-                                <video controls class="w-full max-h-48" preload="metadata" poster="{{ $property->video_thumbnail ?? $property->featured_image }}">
-                                    <source src="{{ $property->video_url }}">
-                                    Your browser does not support the video tag.
-                                </video>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Live Video Stream</label>
+                                    <div class="rounded-lg overflow-hidden border border-slate-200 bg-black">
+                                        <video id="existing_video_player" controls playsinline class="w-full h-44 object-contain" preload="metadata" poster="{{ $property->video_thumbnail ?? $property->featured_image }}">
+                                            <source src="{{ $property->video_url }}">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                    <button type="button" id="btn_capture_existing_frame" class="mt-2 w-full py-1.5 px-3 rounded-lg bg-forest-900 hover:bg-forest-800 text-gold-300 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+                                        <i class="fa-solid fa-camera"></i>
+                                        <span>Capture Current Frame as New Poster</span>
+                                    </button>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Current Poster Frame Thumbnail</label>
+                                    <div class="relative w-full h-44 rounded-lg bg-slate-900 border border-slate-200 overflow-hidden flex items-center justify-center">
+                                        @if($property->video_thumbnail)
+                                            <img id="current_poster_img" src="{{ $property->video_thumbnail }}" alt="Current Poster" class="w-full h-full object-cover">
+                                        @else
+                                            <div id="no_poster_badge" class="text-center text-slate-400 text-xs p-4">
+                                                <i class="fa-solid fa-image text-2xl mb-1 block"></i>
+                                                <span>No thumbnail generated yet.<br>Click "Capture Current Frame" on the left!</span>
+                                            </div>
+                                            <img id="current_poster_img" src="" alt="Captured Poster" class="hidden w-full h-full object-cover">
+                                        @endif
+                                    </div>
+                                    <span class="text-[10px] text-slate-500 mt-1 block font-mono truncate">{{ $property->video_url }}</span>
+                                </div>
                             </div>
-                            <span class="text-[11px] text-forest-900 font-mono block truncate">{{ $property->video_url }}</span>
                         </div>
                     @endif
 
                     <div>
                         <label class="block text-xs font-bold text-slate-800 mb-1">Upload New Video File (.mp4, .webm, .mov):</label>
-                        <input type="file" name="video_file" accept=".mp4,.webm,.mov,.ogg,.ogv,.m4v,.avi,.3gp" class="block w-full text-xs text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-forest-900 file:text-gold-300 hover:file:bg-forest-800 cursor-pointer">
+                        <input type="file" id="video_file_input" name="video_file" accept=".mp4,.webm,.mov,.ogg,.ogv,.m4v,.avi,.3gp" class="block w-full text-xs text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-forest-900 file:text-gold-300 hover:file:bg-forest-800 cursor-pointer">
                         <p class="text-[11px] text-slate-500 mt-1">
                             Videos are automatically compressed for web streaming. If this property has no photos, the video and its poster will serve as the primary media.
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-200">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Or direct video / embed URL:</label>
-                            <input type="text" name="video_url" value="{{ old('video_url', $property->video_url) }}" placeholder="https://..." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-forest-800 bg-white">
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Or direct video / embed URL (e.g. storage or external):</label>
+                            <input type="text" id="video_url_input" name="video_url" value="{{ old('video_url', $property->video_url) }}" placeholder="https://... or /storage/properties/videos/..." class="w-full px-3.5 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-forest-800 bg-white">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Custom Video Poster Thumbnail (Optional):</label>
+                            <label class="block text-[11px] font-semibold text-slate-700 mb-1">Custom Video Poster Thumbnail (Optional override):</label>
                             <input type="file" name="video_thumbnail_file" accept=".jpg,.jpeg,.png,.webp" class="block w-full text-xs text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Hidden Client-Side Extracted Poster Storage -->
+                    <input type="hidden" name="client_video_thumbnail" id="client_video_thumbnail" value="">
+
+                    <!-- New Upload Preview Box (when new file or URL is entered) -->
+                    <div id="new_video_preview_card" class="hidden p-4 rounded-xl bg-white border border-forest-800/30 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <span class="text-xs font-bold text-forest-950 flex items-center gap-1.5">
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i> New Video Source Loaded
+                            </span>
+                            <span id="new_thumbnail_status_badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Poster Extracted</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">New Video Stream</label>
+                                <video id="new_interactive_video" controls playsinline class="w-full h-44 rounded-lg bg-black object-contain shadow-inner"></video>
+                                <button type="button" id="btn_capture_new_frame" class="mt-2 w-full py-1.5 px-3 rounded-lg bg-forest-900 hover:bg-forest-800 text-gold-300 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <span>Capture Frame as Poster</span>
+                                </button>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">New Auto Poster Thumbnail</label>
+                                <div class="relative w-full h-44 rounded-lg bg-slate-900 border border-slate-200 overflow-hidden flex items-center justify-center">
+                                    <img id="new_poster_preview_img" src="" alt="New Poster" class="w-full h-full object-cover">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -291,12 +347,104 @@
             <div class="pt-6 border-t border-slate-100 flex items-center justify-end space-x-4">
                 <a href="{{ route('admin.properties.index') }}" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs">Cancel</a>
                 <button type="submit" class="px-8 py-2.5 rounded-xl bg-forest-900 hover:bg-forest-800 text-white font-bold text-xs uppercase tracking-wider shadow">
-                    Save Changes
+                    Save Changes & Update Dossier
                 </button>
             </div>
 
         </form>
 
+        <!-- Hidden Video Frame Grabber Canvas -->
+        <canvas id="offscreen_canvas" class="hidden"></canvas>
+
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const videoFileInput = document.getElementById('video_file_input');
+    const videoUrlInput = document.getElementById('video_url_input');
+    const newVideoPreviewCard = document.getElementById('new_video_preview_card');
+    const newInteractiveVideo = document.getElementById('new_interactive_video');
+    const newPosterPreviewImg = document.getElementById('new_poster_preview_img');
+    const clientThumbInput = document.getElementById('client_video_thumbnail');
+    const btnCaptureNewFrame = document.getElementById('btn_capture_new_frame');
+    const btnCaptureExistingFrame = document.getElementById('btn_capture_existing_frame');
+    const existingVideo = document.getElementById('existing_video_player');
+    const currentPosterImg = document.getElementById('current_poster_img');
+    const noPosterBadge = document.getElementById('no_poster_badge');
+    const canvas = document.getElementById('offscreen_canvas');
+
+    function extractPoster(videoElem, targetImg) {
+        try {
+            if (!videoElem.videoWidth || !videoElem.videoHeight) return;
+            canvas.width = Math.min(videoElem.videoWidth, 1280);
+            canvas.height = Math.round((videoElem.videoHeight / videoElem.videoWidth) * canvas.width);
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/webp', 0.85);
+            if (dataUrl && dataUrl.length > 100) {
+                clientThumbInput.value = dataUrl;
+                if (targetImg) {
+                    targetImg.src = dataUrl;
+                    targetImg.classList.remove('hidden');
+                }
+                if (noPosterBadge) {
+                    noPosterBadge.classList.add('hidden');
+                }
+            }
+        } catch (err) {
+            console.warn('Canvas capture note:', err);
+        }
+    }
+
+    if (btnCaptureExistingFrame && existingVideo) {
+        btnCaptureExistingFrame.addEventListener('click', () => {
+            extractPoster(existingVideo, currentPosterImg);
+            btnCaptureExistingFrame.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i> <span>Frame Saved! Click "Save Changes"</span>';
+        });
+    }
+
+    function loadNewVideo(src) {
+        if (!src) return;
+        newVideoPreviewCard.classList.remove('hidden');
+        newInteractiveVideo.crossOrigin = 'anonymous';
+        newInteractiveVideo.src = src;
+
+        newInteractiveVideo.onloadedmetadata = () => {
+            newInteractiveVideo.currentTime = Math.min(1.0, newInteractiveVideo.duration / 2);
+        };
+
+        newInteractiveVideo.onseeked = () => {
+            extractPoster(newInteractiveVideo, newPosterPreviewImg);
+        };
+    }
+
+    if (videoFileInput) {
+        videoFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const objectUrl = URL.createObjectURL(file);
+                loadNewVideo(objectUrl);
+            }
+        });
+    }
+
+    if (videoUrlInput) {
+        videoUrlInput.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            if (url && url !== "{{ $property->video_url }}" && (url.startsWith('http') || url.startsWith('/storage') || url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov'))) {
+                loadNewVideo(url);
+            }
+        });
+    }
+
+    if (btnCaptureNewFrame) {
+        btnCaptureNewFrame.addEventListener('click', () => {
+            extractPoster(newInteractiveVideo, newPosterPreviewImg);
+        });
+    }
+});
+</script>
 @endsection

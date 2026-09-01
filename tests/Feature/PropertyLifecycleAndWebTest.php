@@ -221,4 +221,17 @@ class PropertyLifecycleAndWebTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee("Governor's Consent & Registered Deed");
     }
+
+    public function test_client_video_thumbnail_saving()
+    {
+        $imageService = new \App\Services\ImageUploadService();
+
+        // 1x1 PNG base64 string
+        $sampleBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+        
+        $savedPath = $imageService->saveBase64Image($sampleBase64, 'properties/video-thumbnails');
+
+        $this->assertNotNull($savedPath);
+        $this->assertStringStartsWith('/storage/properties/video-thumbnails/', $savedPath);
+    }
 }
